@@ -1,0 +1,620 @@
+
+.page {
+  --pink-purple: #c13584;
+  --pink: #e1306c;
+  --orange: #f77737;
+  --dark: #17151d;
+
+  min-height: 100vh;
+  background: #ffffff;
+  color: var(--dark);
+  overflow: hidden;
+}
+
+.hero {
+  min-height: 100vh;
+  padding: 76px 24px 100px;
+  position: relative;
+  isolation: isolate;
+}
+
+.container {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.ambientGlow {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+
+  width: 900px;
+  height: 650px;
+  top: -360px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: radial-gradient(
+    ellipse,
+    rgba(193, 53, 132, 0.075) 0%,
+    rgba(225, 48, 108, 0.035) 45%,
+    transparent 75%
+  );
+
+  filter: blur(45px);
+}
+
+/* Etiqueta superior */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  padding: 9px 16px;
+
+  border: 1px solid #f2d6e7;
+  border-radius: 100px;
+  background: #fff7fb;
+
+  color: #a42a81;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  line-height: 1.4;
+}
+
+.eyebrowIcon {
+  display: flex;
+  flex: 0 0 14px;
+  color: #e1306c;
+}
+
+.eyebrowIcon svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+}
+
+/* Headline */
+
+.headline {
+  max-width: 970px;
+  margin: 26px 0 0;
+
+  font-size: clamp(36px, 5.1vw, 66px);
+  line-height: 1.12;
+  font-weight: 800;
+  letter-spacing: -2.8px;
+  text-transform: uppercase;
+
+  text-wrap: balance;
+}
+
+.gradientText {
+  background: linear-gradient(
+    110deg,
+    #c13584 0%,
+    #e1306c 38%,
+    #f77737 72%,
+    #ffdc80 100%
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Descrição */
+
+.description {
+  max-width: 670px;
+  margin: 25px 0 0;
+
+  color: #73717c;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.75;
+  letter-spacing: -0.2px;
+}
+
+/* Área da mídia */
+
+.mediaWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 670px;
+  margin-top: 43px;
+}
+
+.mediaGlow {
+  position: absolute;
+  z-index: -1;
+
+  inset: -25px;
+  border-radius: 36px;
+
+  background: linear-gradient(
+    115deg,
+    rgba(193, 53, 132, 0.16),
+    rgba(193, 53, 132, 0.17),
+    rgba(247, 119, 55, 0.15)
+  );
+
+  filter: blur(35px);
+  pointer-events: none;
+}
+
+.mediaFrame {
+  padding: 5px;
+  border-radius: 23px;
+
+  background: linear-gradient(
+    125deg,
+    #c13584,
+    #e1306c,
+    #f77737,
+    #ffdc80
+  );
+
+  box-shadow:
+    0 25px 70px rgba(45, 29, 66, 0.09),
+    0 8px 24px rgba(225, 48, 108, 0.08);
+}
+
+.mediaPlaceholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #faf9fc;
+  border-radius: 19px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+
+  color: #aaa6b1;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.playSymbol {
+  width: 70px;
+  height: 70px;
+
+  display: grid;
+  place-items: center;
+
+  color: #e1306c;
+  background: #ffffff;
+  border-radius: 50%;
+
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+.playSymbol svg {
+  display: block;
+  width: 29px;
+  height: 29px;
+}
+
+.floatingSparkle {
+  position: absolute;
+  top: -17px;
+  right: -22px;
+
+  color: #f77737;
+  filter: drop-shadow(0 5px 12px rgba(247,119,55,.2));
+}
+
+.floatingSparkle svg {
+  display: block;
+  width: 27px;
+  height: 27px;
+}
+
+/* CTA */
+
+.actionArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 17px;
+
+  width: 100%;
+  margin-top: 33px;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  width: 100%;
+  max-width: 345px;
+  min-height: 64px;
+
+  border: none;
+  border-radius: 9999px;
+
+  background: linear-gradient(
+    105deg,
+    #c13584 0%,
+    #c13584 30%,
+    #e1306c 65%,
+    #f77737 100%
+  );
+
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+
+  box-shadow:
+    0 13px 30px rgba(225, 48, 108, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
+}
+
+.cta:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.05);
+
+  box-shadow:
+    0 18px 38px rgba(225, 48, 108, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.cta:active {
+  transform: translateY(0);
+}
+
+.cta:focus-visible {
+  outline: 3px solid #c13584;
+  outline-offset: 4px;
+}
+
+.cta svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.25s ease;
+}
+
+.cta:hover svg {
+  transform: translateX(4px);
+}
+
+.ctaCaption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  margin: 0;
+  color: #95909b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ctaCaption svg {
+  display: block;
+  width: 13px;
+  height: 13px;
+  flex: 0 0 13px;
+  color: #e1306c;
+}
+
+/* Segunda seção: acesso rápido ao conteúdo */
+
+.accessSection {
+  position: relative;
+  overflow: hidden;
+  padding: 96px 24px 104px;
+  background:
+    radial-gradient(ellipse at 12% 24%, rgba(225, 48, 108, 0.11), transparent 32%),
+    radial-gradient(ellipse at 88% 72%, rgba(247, 119, 55, 0.12), transparent 34%),
+    radial-gradient(ellipse at 54% 8%, rgba(255, 220, 128, 0.16), transparent 38%),
+    linear-gradient(135deg, #fff9fc 0%, #fffdf9 52%, #fff8f4 100%);
+}
+
+.accessHeader {
+  width: 100%;
+  max-width: 830px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.accessEyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border: 1px solid rgba(193, 53, 132, 0.15);
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.76);
+  padding: 8px 14px;
+  color: #a52d70;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.accessTitle {
+  margin: 22px 0 0;
+  color: #18181b;
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.accessDescription {
+  max-width: 660px;
+  margin: 20px auto 0;
+  color: #71717a;
+  font-size: clamp(0.95rem, 1.7vw, 1.1rem);
+  font-weight: 500;
+  line-height: 1.75;
+  text-wrap: balance;
+}
+
+.carouselViewport {
+  width: calc(100% + 48px);
+  margin: 48px 0 0 -24px;
+  overflow: hidden;
+  padding: 14px 0 28px;
+  mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+}
+
+.carouselTrack {
+  display: flex;
+  width: max-content;
+  animation: ideas-marquee 42s linear infinite;
+}
+
+.carouselViewport:hover .carouselTrack {
+  animation-play-state: paused;
+}
+
+.carouselGroup {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 18px;
+  padding-right: 18px;
+}
+
+.ideaCard {
+  position: relative;
+  display: flex;
+  width: clamp(250px, 27vw, 320px);
+  min-height: 218px;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid rgba(193, 53, 132, 0.12);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.86);
+  padding: 28px;
+  box-shadow: 0 18px 45px rgba(84, 42, 66, 0.075);
+}
+
+.ideaNumber {
+  color: #c13584;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+}
+
+.ideaLabel {
+  margin-top: 24px;
+  color: #9a929b;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+.ideaTitle {
+  max-width: 250px;
+  margin: 8px 0 0;
+  color: #26212a;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.7px;
+  line-height: 1.32;
+}
+
+.ideaAccent {
+  position: absolute;
+  right: 28px;
+  bottom: 0;
+  left: 28px;
+  height: 3px;
+  border-radius: 9999px 9999px 0 0;
+  background: linear-gradient(90deg, #c13584, #e1306c, #f77737, #ffdc80);
+  opacity: 0.78;
+}
+
+@keyframes ideas-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Tablet */
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 62px 22px 80px;
+  }
+
+  .accessSection {
+    padding: 82px 22px 90px;
+  }
+
+  .headline {
+    max-width: 670px;
+    font-size: clamp(35px, 6vw, 49px);
+    letter-spacing: -1.7px;
+    line-height: 1.15;
+  }
+
+  .description {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .mediaWrapper {
+    margin-top: 36px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 47px 18px 70px;
+  }
+
+  .accessSection {
+    padding: 66px 18px 76px;
+  }
+
+  .accessEyebrow {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+
+  .accessTitle {
+    margin-top: 18px;
+    font-size: clamp(1.8rem, 8.2vw, 2.45rem);
+    letter-spacing: -0.05em;
+  }
+
+  .accessDescription {
+    margin-top: 16px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .carouselViewport {
+    width: calc(100% + 36px);
+    margin-top: 32px;
+    margin-left: -18px;
+    padding-bottom: 20px;
+  }
+
+  .carouselGroup {
+    gap: 13px;
+    padding-right: 13px;
+  }
+
+  .ideaCard {
+    width: 258px;
+    min-height: 194px;
+    border-radius: 18px;
+    padding: 23px;
+  }
+
+  .ideaLabel {
+    margin-top: 20px;
+  }
+
+  .ideaTitle {
+    font-size: 19px;
+  }
+
+  .ideaAccent {
+    right: 23px;
+    left: 23px;
+  }
+
+  .eyebrow {
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 8px 12px;
+  }
+
+  .headline {
+    margin-top: 23px;
+    font-size: clamp(31px, 8.2vw, 39px);
+    letter-spacing: -1.35px;
+    line-height: 1.16;
+  }
+
+  .description {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .mediaWrapper {
+    margin-top: 32px;
+  }
+
+  .mediaFrame {
+    border-radius: 17px;
+    padding: 4px;
+  }
+
+  .mediaPlaceholder {
+    border-radius: 13px;
+  }
+
+  .mediaGlow {
+    inset: -12px;
+  }
+
+  .floatingSparkle {
+    right: -8px;
+    top: -14px;
+  }
+
+  .actionArea {
+    margin-top: 28px;
+  }
+
+  .cta {
+    max-width: 100%;
+    min-height: 61px;
+    font-size: 15px;
+    border-radius: 9999px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta,
+  .cta svg {
+    transition: none;
+  }
+
+  .carouselTrack {
+    animation: none;
+  }
+
+  .carouselViewport {
+    overflow-x: auto;
+    mask-image: none;
+    scrollbar-width: thin;
+  }
+}
