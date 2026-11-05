@@ -138,7 +138,7 @@ export default function ModelosLojasPage() {
             <span className={styles.gradientText}>ÚNICO CLIQUE!</span>
           </h2>
           <p className={styles.accessDescription}>
-            Não é um curso chato que voce compra e nunca mais ver. O Ideias Story fica
+            Não é um curso chato que voce compra e nunca mais ver. O Ideias Store fica
             a um clique,<strong > na tela do seu celular como um app.</strong>
           </p>
         </div>
