@@ -1,0 +1,50 @@
+.complete-offer-shinne {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.complete-offer-shinne::after {
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 42%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.68),
+    rgba(255, 255, 255, 0.18),
+    transparent
+  );
+  content: "";
+  pointer-events: none;
+  transform: skewX(-25deg) translateX(0);
+  animation: complete-offer-shinne-sweep 3.8s linear infinite;
+}
+
+@keyframes complete-offer-shinne-sweep {
+  0%,
+  52% {
+    transform: skewX(-25deg) translateX(0);
+    opacity: 0;
+  }
+
+  58% {
+    opacity: 1;
+  }
+
+  83%,
+  100% {
+    transform: skewX(-25deg) translateX(600%);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .complete-offer-shinne::after {
+    animation: none;
+    opacity: 0;
+  }
+}

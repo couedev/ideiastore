@@ -3,7 +3,16 @@ import { Montserrat } from "next/font/google";
 import Image from "next/image";
 import { Check, ChevronDown, Image as ImageIcon, Play, ShieldCheck } from "lucide-react";
 import styles from "./page.module.css";
+import "./shinne.css";
 import DepoimentosCarousel from "./depoimentos-carousel";
+import OfertaEssencialAction from "./oferta-essencial-action";
+import { checkoutLinks } from "./checkout-links";
+import heroImage from "../../public/Ideias que inspiram sua loja.webp";
+import reveillonImage from "../../public/Carrossel de Réveillon Glamouroso.webp";
+import blackFridayImage from "../../public/Carrossel promocional Black Friday.webp";
+import natalImage from "../../public/Ideias de Natal em Reels Festivos.webp";
+import postsImage from "../../public/Carrossel de Moda Rosa e Neutro.webp";
+import bonusImage from "../../public/Carrossel de vídeos em tons rosados.webp";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -89,22 +98,38 @@ const reelIdeas = [
   },
 ];
 
-const conteudosIncluidos = [
+const conteudosIncluidos: Array<{
+  titulo: string;
+  subtitulo: string;
+  imagem?: typeof reveillonImage;
+  altImagem?: string;
+  aviso?: string;
+}> = [
   {
     titulo: "IDEIAS DE REELS PARA VENDER NO FIM DE ANO",
+    imagem: reveillonImage,
+    altImagem: "Montagem de Reels de Réveillon para vender no fim de ano",
     subtitulo: "Conteúdos para apresentar seus produtos e aproveitar as vendas da temporada.",
   },
   {
-    titulo: "IDEIAS DE POST PARA SUA LOJA",
-    subtitulo: "Inspirações para manter o perfil da sua loja sempre atualizado.",
-  },
-  {
     titulo: "IDEIAS DE REELS DE BLACK FRIDAY",
+    imagem: blackFridayImage,
+    altImagem: "Montagem de vídeos promocionais para Black Friday",
     subtitulo: "Escolha um modelo de vídeo para divulgar sua promoção de fim de ano.",
   },
   {
     titulo: "IDEIAS DE VÍDEOS DE NATAL",
+    imagem: natalImage,
+    altImagem: "Montagem de ideias de Reels festivos para o Natal",
     subtitulo: "Crie conteúdos com clima natalino e destaque opções para presentear.",
+  },
+  {
+    titulo: "IDEIAS DE POST PARA SUA LOJA",
+    imagem: postsImage,
+    altImagem: "Exemplos de carrosséis de moda em tons de rosa e neutro",
+    subtitulo: "Inspirações para manter o perfil da sua loja sempre atualizado.",
+    aviso:
+      "Você pode copiar esses modelos de post com um clique e enviar para o ChatGPT ou Gemini junto com sua imagem de referência para criar uma versão para a sua loja.",
   },
 ];
 
@@ -203,19 +228,12 @@ export default function ModelosLojasPage() {
             <div className={styles.mediaGlow} aria-hidden="true" />
 
             <div className={styles.mediaFrame}>
-              <div className={styles.mediaPlaceholder}>
-                <div className={styles.playSymbol} aria-hidden="true">
-                  <svg
-                    width="29"
-                    height="29"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M8 5.5v13l11-6.5-11-6.5Z" />
-                  </svg>
-                </div>
-                <span>Seu vídeo ou imagem aqui</span>
-              </div>
+              <Image
+                className={styles.heroImage}
+                src={heroImage}
+                alt="Mulher segurando o celular com o app Ideias Store e exemplos de vídeos ao redor"
+                priority
+              />
             </div>
 
             <span className={styles.floatingSparkle} aria-hidden="true">
@@ -269,6 +287,7 @@ export default function ModelosLojasPage() {
                   <span className={styles.playBadge} aria-hidden="true">
                     <Play size={22} fill="currentColor" strokeWidth={1.5} />
                   </span>
+                  <span className={styles.ideaAccent} aria-hidden="true" />
                 </article>
               ))}
             </div>
@@ -286,6 +305,7 @@ export default function ModelosLojasPage() {
                   <span className={styles.playBadge} aria-hidden="true">
                     <Play size={22} fill="currentColor" strokeWidth={1.5} />
                   </span>
+                  <span className={styles.ideaAccent} aria-hidden="true" />
                 </article>
               ))}
             </div>
@@ -323,12 +343,28 @@ export default function ModelosLojasPage() {
               <h3 className={styles.deliveryTitle}>{conteudo.titulo}</h3>
               <p className={styles.deliverySubtitle}>{conteudo.subtitulo}</p>
               <div
-                className={styles.deliveryImageSpace}
-                role="img"
-                aria-label={`Espaço reservado para imagem: ${conteudo.titulo}`}
+                className={`${styles.deliveryImageSpace} ${conteudo.imagem ? styles.deliveryImageFilled : ""}`}
+                role={conteudo.imagem ? undefined : "img"}
+                aria-label={conteudo.imagem ? undefined : `Espaço reservado para imagem: ${conteudo.titulo}`}
               >
-                <ImageIcon size={30} strokeWidth={1.5} aria-hidden="true" />
+                {conteudo.imagem ? (
+                  <Image
+                    className={styles.deliveryImage}
+                    src={conteudo.imagem}
+                    alt={conteudo.altImagem ?? conteudo.titulo}
+                    fill
+                    sizes="(max-width: 480px) calc(100vw - 74px), (max-width: 768px) 45vw, 500px"
+                  />
+                ) : (
+                  <ImageIcon size={30} strokeWidth={1.5} aria-hidden="true" />
+                )}
               </div>
+              {conteudo.aviso && (
+                <p className={styles.deliveryNote}>
+                  <SparkleIcon size={15} />
+                  <span>{conteudo.aviso}</span>
+                </p>
+              )}
             </article>
           ))}
         </div>
@@ -343,7 +379,7 @@ export default function ModelosLojasPage() {
             RECEBA TOTALMENTE <span className={styles.gradientText}>GRÁTIS</span>
           </h2>
           <p className={styles.accessDescription}>
-            Adquirindo nos próximos 10 minutos, você recebe também:
+            Adquirindo nos próximos <strong className={styles.bonusTime}>10 minutos</strong>, você recebe também:
           </p>
           <h3 className={styles.bonusTitle}>IDEIAS DE VÍDEOS TRENDS</h3>
           <p className={styles.bonusDescription}>
@@ -351,12 +387,14 @@ export default function ModelosLojasPage() {
           </p>
         </div>
 
-        <div
-          className={styles.bonusImageSpace}
-          role="img"
-          aria-label="Espaço reservado para a imagem do bônus de vídeos trends"
-        >
-          <ImageIcon size={34} strokeWidth={1.4} aria-hidden="true" />
+        <div className={styles.bonusImageSpace}>
+          <Image
+            className={styles.bonusImage}
+            src={bonusImage}
+            alt="Montagem de ideias de vídeos Trends em tons rosados"
+            fill
+            sizes="(max-width: 900px) calc(100vw - 36px), 860px"
+          />
         </div>
 
         <div className={styles.actionArea}>
@@ -406,13 +444,17 @@ export default function ModelosLojasPage() {
                 ))}
               </ul>
 
-              <button
-                className={`${styles.offerButton} ${oferta.completo ? styles.offerButtonFeatured : ""}`}
-                type="button"
-              >
-                {oferta.botao}
-                <ArrowIcon />
-              </button>
+              {oferta.completo ? (
+                <a
+                  className={`${styles.offerButton} ${styles.offerButtonFeatured} complete-offer-shinne`}
+                  href={checkoutLinks.completo}
+                >
+                  {oferta.botao}
+                  <ArrowIcon />
+                </a>
+              ) : (
+                <OfertaEssencialAction />
+              )}
               <p className={styles.offerPaymentNote}>Pagamento único</p>
             </article>
           ))}
