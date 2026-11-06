@@ -6,6 +6,7 @@ import styles from "./page.module.css";
 import "./shinne.css";
 import DepoimentosCarousel from "./depoimentos-carousel";
 import OfertaEssencialAction from "./oferta-essencial-action";
+import MetaPageView from "./meta-page-view";
 import { checkoutLinks } from "./checkout-links";
 import heroImage from "../../public/Ideias que inspiram sua loja.webp";
 import reveillonImage from "../../public/Carrossel de Réveillon Glamouroso.webp";
@@ -200,6 +201,7 @@ const perguntasFrequentes = [
 export default function ModelosLojasPage() {
   return (
     <>
+    <MetaPageView />
     <main className={`${styles.page} ${montserrat.className}`}>
       <section className={styles.hero} aria-labelledby="hero-title">
         <div className={styles.ambientGlow} aria-hidden="true" />
