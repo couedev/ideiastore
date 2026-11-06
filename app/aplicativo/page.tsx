@@ -16,7 +16,7 @@ import {
 import styles from "./page.module.css";
 import { videos } from "./videos";
 
-const categorias = ["Todos", "Trends", "Post", "Natal"] as const;
+const categorias = ["Todos", "Trends", "Post", "Natal", "Black Friday"] as const;
 type CategoriaFiltro = (typeof categorias)[number];
 type Aba = "home" | "favoritos" | "perfil";
 const videosPorPagina = 10;

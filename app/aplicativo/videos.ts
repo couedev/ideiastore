@@ -1,4 +1,4 @@
-export type VideoCategoria = "Trends" | "Post" | "Natal";
+export type VideoCategoria = "Trends" | "Post" | "Natal" | "Black Friday";
 
 export type VideoIdeia = {
   id: string;
