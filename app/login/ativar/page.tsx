@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import ActivationForm from "./activation-form";
+import MagicLinkCallback from "./magic-link-callback";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "Ative sua conta | IdeaStore",
-  description: "Defina uma senha para ativar seu acesso à IdeaStore.",
+  title: "Acessando o aplicativo | IdeaStore",
+  referrer: "no-referrer",
+  description: "Validando seu link de acesso à IdeaStore.",
 };
 
 export default function ActivatePage() {
@@ -20,10 +21,10 @@ export default function ActivatePage() {
           priority
           className={styles.logo}
         />
-        <p className={styles.eyebrow}>Seu acesso está quase pronto</p>
-        <h1 className={styles.title}>Crie sua senha</h1>
-        <p className={styles.subtitle}>Escolha uma senha segura para acessar suas inspirações.</p>
-        <ActivationForm />
+        <p className={styles.eyebrow}>Acesso seguro</p>
+        <h1 className={styles.title}>Abrindo seu aplicativo</h1>
+        <p className={styles.subtitle}>Estamos validando seu link de acesso.</p>
+        <MagicLinkCallback />
       </section>
     </main>
   );

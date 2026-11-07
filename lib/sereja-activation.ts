@@ -1,4 +1,4 @@
-import { supabaseAdminFetch } from "./supabase-admin";
+import { hasPaidPurchase, supabaseAdminFetch } from "./supabase-admin";
 
 type AuthUser = {
   id: string;
@@ -192,12 +192,17 @@ async function updateInviteState(
   if (!response.ok) throw new Error(`Não foi possível atualizar o estado do convite (${response.status}).`);
 }
 
-async function createActivationLink(email: string, name: string) {
-  const siteUrl = (process.env.SITE_URL || "https://ideiastore.online").replace(/\/$/, "");
+async function createMagicLink(email: string, name: string) {
+  const configuredSiteUrl = process.env.SITE_URL?.trim();
+  const siteUrl = configuredSiteUrl || (process.env.NODE_ENV === "production" ? "" : "http://localhost:3000");
+  if (!siteUrl) throw new Error("SITE_URL must be configured in production.");
+  const siteOrigin = new URL(siteUrl).origin;
+  if (process.env.NODE_ENV === "production" && siteOrigin !== "https://ideiastore.online") {
+    throw new Error("Production SITE_URL must be https://ideiastore.online.");
+  }
   const payload = {
-    type: "invite",
+    type: "magiclink",
     email,
-    redirect_to: `${siteUrl}/login/ativar`,
     data: { name },
   };
 
@@ -207,17 +212,20 @@ async function createActivationLink(email: string, name: string) {
     body: JSON.stringify(payload),
   });
 
-  if (!response.ok) {
-    response = await supabaseAdminFetch("/auth/v1/admin/generate_link", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...payload, type: "recovery" }),
-    });
-  }
-
-  const data = await readJson<{ action_link?: string }>(response);
+  const data = await readJson<{
+    action_link?: string;
+    hashed_token?: string;
+    verification_type?: string;
+  }>(response);
   if (!data.action_link) throw new Error("O Supabase não retornou o link de ativação.");
-  return data.action_link;
+  if (!data.hashed_token) throw new Error("Supabase did not return the activation token hash.");
+
+  const verificationType = data.verification_type === "magiclink" ? "magiclink" : "";
+  if (!verificationType) throw new Error("Supabase did not return a magic link verification type.");
+  const activationUrl = new URL("/login/ativar", siteOrigin);
+  activationUrl.searchParams.set("token_hash", data.hashed_token);
+  activationUrl.searchParams.set("type", verificationType);
+  return activationUrl.toString();
 }
 
 function escapeHtml(value: string) {
@@ -230,7 +238,7 @@ function escapeHtml(value: string) {
   })[character]!);
 }
 
-async function sendBrevoActivation(email: string, name: string, actionLink: string) {
+async function sendBrevoMagicLink(email: string, name: string, actionLink: string) {
   const apiKey = process.env.BREVO_API_KEY;
   const senderEmail = process.env.BREVO_SENDER_EMAIL;
   if (!apiKey || !senderEmail) throw new Error("Brevo API ou remetente não configurado.");
@@ -243,9 +251,9 @@ async function sendBrevoActivation(email: string, name: string, actionLink: stri
     body: JSON.stringify({
       sender: { name: "IdeaStore", email: senderEmail },
       to: [{ email, name }],
-      subject: "Ative seu acesso à IdeaStore",
-      htmlContent: `<!doctype html><html lang="pt-BR"><body style="margin:0;background:#f7f2f2;font-family:Arial,sans-serif;color:#2a2226"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="padding:36px 12px"><tr><td align="center"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:#fff;border-radius:20px;padding:40px 32px"><tr><td><p style="margin:0 0 12px;color:#c63e68;font-weight:bold;letter-spacing:1px;font-size:12px">IDEASTORE</p><h1 style="margin:0 0 16px;font-size:25px">Seu acesso está pronto, ${safeName}!</h1><p style="margin:0 0 26px;color:#766d72;line-height:1.6">Defina uma senha para ativar sua conta e acessar suas ideias para a loja.</p><p style="margin:0 0 28px"><a href="${safeLink}" style="display:inline-block;padding:15px 24px;border-radius:12px;background:#c93c68;color:#fff;text-decoration:none;font-weight:bold">Ativar minha conta</a></p><p style="margin:0;color:#8c8388;font-size:12px;line-height:1.6">Se o botão não abrir, use este link:<br><a href="${safeLink}" style="color:#c93c68;word-break:break-all">${safeLink}</a></p><p style="margin:28px 0 0;color:#aaa1a6;font-size:11px">Se você não fez essa compra, pode ignorar este e-mail.</p></td></tr></table></td></tr></table></body></html>`,
-      textContent: `Olá, ${name || ""}! Ative sua conta IdeaStore e defina uma senha neste link: ${actionLink}`,
+      subject: "Link de acesso à IdeaStore",
+      htmlContent: `<!doctype html><html lang="pt-BR"><body style="margin:0;background:#f7f2f2;font-family:Arial,sans-serif;color:#2a2226"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="padding:36px 12px"><tr><td align="center"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:#fff;border-radius:20px;padding:40px 32px"><tr><td><p style="margin:0 0 12px;color:#c63e68;font-weight:bold;letter-spacing:1px;font-size:12px">IDEASTORE</p><h1 style="margin:0 0 16px;font-size:25px">Seu acesso está pronto, ${safeName}!</h1><p style="margin:0 0 26px;color:#766d72;line-height:1.6">Entre com um clique e acesse suas ideias para a loja.</p><p style="margin:0 0 28px"><a href="${safeLink}" style="display:inline-block;padding:15px 24px;border-radius:12px;background:#c93c68;color:#fff;text-decoration:none;font-weight:bold">Acessar meu aplicativo</a></p><p style="margin:0;color:#8c8388;font-size:12px;line-height:1.6">Se o botão não abrir, use este link:<br><a href="${safeLink}" style="color:#c93c68;word-break:break-all">${safeLink}</a></p><p style="margin:28px 0 0;color:#aaa1a6;font-size:11px">Se você não fez essa compra, pode ignorar este e-mail.</p></td></tr></table></td></tr></table></body></html>`,
+      textContent: `Olá, ${name || ""}! Acesse seu aplicativo IdeaStore pelo link: ${actionLink}`,
     }),
     cache: "no-store",
   });
@@ -290,11 +298,11 @@ export async function sendPendingActivation(user: StoreUser) {
   if (!claim.length) return "already-handled" as const;
 
   try {
-    const actionLink = await createActivationLink(user.email, user.nome);
-    await sendBrevoActivation(user.email, user.nome, actionLink);
+    const actionLink = await createMagicLink(user.email, user.nome);
+    await sendBrevoMagicLink(user.email, user.nome, actionLink);
     await updateInviteState(user.id, {
       convite_status: "sent",
-      convite_lease_ate: null,
+      convite_lease_ate: new Date(Date.now() + 60 * 1000).toISOString(),
       convite_ultimo_erro: null,
     });
     return "sent" as const;
@@ -310,4 +318,42 @@ export async function sendPendingActivation(user: StoreUser) {
     });
     return "failed" as const;
   }
+}
+
+export async function requestMagicLinkForEmail(email: string) {
+  const profile = await readStoreProfileByEmail(email.trim().toLowerCase());
+  if (!profile || !(await hasPaidPurchase(profile.id))) return "not-eligible" as const;
+
+  if (profile.convite_status === "none" || profile.convite_status === "sent") {
+    const claimParams = new URLSearchParams({
+      id: `eq.${profile.id}`,
+      select: "id",
+    });
+    if (profile.convite_status === "none") {
+      claimParams.set("convite_status", "eq.none");
+    } else {
+      claimParams.set("convite_status", "eq.sent");
+      claimParams.set("or", `(convite_lease_ate.is.null,convite_lease_ate.lt.${new Date().toISOString()})`);
+    }
+
+    const claimResponse = await supabaseAdminFetch(`/rest/v1/usuarios?${claimParams}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify({
+        convite_status: "pending",
+        convite_lease_ate: null,
+        convite_ultimo_erro: null,
+      }),
+    });
+    const claim = await readJson<Array<{ id: string }>>(claimResponse);
+    if (!claim.length) return "already-handled" as const;
+  }
+
+  if (profile.convite_status === "sending") return "already-handled" as const;
+  const currentProfile = await getStoreUserById(profile.id);
+  if (!currentProfile) return "not-eligible" as const;
+  return sendPendingActivation(currentProfile);
 }

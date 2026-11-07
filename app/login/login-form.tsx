@@ -10,6 +10,33 @@ const initialState: LoginState = { error: "" };
 export default function LoginForm() {
   const [state, formAction, pending] = useActionState(signIn, initialState);
   const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [email, setEmail] = useState("");
+  const [linkPending, setLinkPending] = useState(false);
+  const [linkMessage, setLinkMessage] = useState("");
+
+  async function requestAccessLink() {
+    setLinkMessage("");
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!/^\S+@\S+\.\S+$/.test(normalizedEmail)) {
+      setLinkMessage("Digite um email valido para receber o link.");
+      return;
+    }
+
+    setLinkPending(true);
+    const response = await fetch("/api/auth/request-link", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: normalizedEmail }),
+    }).catch(() => null);
+    setLinkPending(false);
+
+    if (!response?.ok) {
+      setLinkMessage("Nao foi possivel solicitar o link agora. Tente novamente em instantes.");
+      return;
+    }
+
+    setLinkMessage("Se este e-mail tiver uma compra aprovada, enviaremos um link para acessar o aplicativo.");
+  }
 
   return (
     <form className={styles.form} action={formAction}>
@@ -22,6 +49,8 @@ export default function LoginForm() {
           name="email"
           type="email"
           placeholder="Seu e-mail"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
           autoComplete="email"
           autoCapitalize="none"
           required
@@ -57,6 +86,16 @@ export default function LoginForm() {
       <button className={styles.submit} type="submit" disabled={pending}>
         {pending ? <><span className={styles.spinner} /> Entrando...</> : <>Entrar na minha conta <span aria-hidden="true">→</span></>}
       </button>
+
+      <button
+        className={styles.magicLinkButton}
+        type="button"
+        onClick={requestAccessLink}
+        disabled={linkPending}
+      >
+        {linkPending ? "Enviando link..." : "Receber um link de acesso"}
+      </button>
+      {linkMessage && <p className={styles.magicLinkMessage} role="status">{linkMessage}</p>}
 
       <p className={styles.secureNote}>
         <LockKeyhole size={13} aria-hidden="true" /> Acesso seguro e protegido
