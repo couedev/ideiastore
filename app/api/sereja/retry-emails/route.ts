@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { isAuthUserEmailConfirmed, sendPendingActivation, type StoreUser } from "../../../../lib/sereja-activation";
 import { hasPaidPurchase, supabaseAdminFetch } from "../../../../lib/supabase-admin";
 
-export const runtime = "nodejs";
-
 export async function GET(request: Request) {
   const secret = process.env.CRON_SECRET;
   if (!secret) return NextResponse.json({ error: "Retry não configurado." }, { status: 503 });

@@ -3,8 +3,6 @@ import { NextResponse } from "next/server";
 import { findOrCreatePurchasedUser, getStoreUserById, isAuthUserEmailConfirmed, sendPendingActivation } from "../../../lib/sereja-activation";
 import { supabaseAdminFetch } from "../../../lib/supabase-admin";
 
-export const runtime = "nodejs";
-
 type SerejaPayload = {
   id?: unknown;
   type?: unknown;
