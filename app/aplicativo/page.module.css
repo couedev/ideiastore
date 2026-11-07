@@ -336,6 +336,19 @@
 
 .profileName { margin: 0; font-size: 18px; font-weight: 750; }
 .profileDescription { max-width: 250px; margin: 8px auto 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+.passwordPanel { margin-top: 22px; padding: 18px; border: 1px solid #f0e3e5; border-radius: 17px; background: #fffaf9; text-align: left; }
+.passwordPanelHeader { display: flex; align-items: center; gap: 8px; color: var(--accent); }
+.passwordPanelTitle { margin: 0; color: var(--ink); font-size: 14px; font-weight: 750; }
+.passwordPanelText { margin: 9px 0 3px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.passwordForm { display: flex; flex-direction: column; }
+.passwordLabel { margin: 13px 0 6px; color: #5c5056; font-size: 11px; font-weight: 700; }
+.passwordInput { width: 100%; height: 46px; padding: 0 12px; border: 1px solid #e9dde0; border-radius: 11px; background: #fff; color: var(--ink); font: inherit; font-size: 13px; }
+.passwordInput:focus { border-color: #c93c68; outline: 3px solid #c93c6818; }
+.passwordSubmit { min-height: 46px; margin-top: 18px; border: 0; border-radius: 11px; background: linear-gradient(105deg, #c83d69, #df5472); color: #fff; font: inherit; font-size: 12px; font-weight: 750; cursor: pointer; }
+.passwordSubmit:disabled { opacity: .65; cursor: wait; }
+.passwordError, .passwordSuccess { margin: 12px 0 0; font-size: 11px; line-height: 1.5; }
+.passwordError { color: #ad294e; }
+.passwordSuccess { color: #42753d; }
 .signOutButton { display: inline-flex; min-height: 40px; align-items: center; justify-content: center; gap: 8px; margin-top: 18px; padding: 0 15px; border: 1px solid #f0e3e5; border-radius: 12px; background: #fff8f8; color: #bd4966; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
 .signOutButton:hover { background: #fbecef; }
 

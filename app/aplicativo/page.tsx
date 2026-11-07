@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import styles from "./page.module.css";
 import { videos } from "./videos";
+import PasswordForm from "./password-form";
 import { signOut } from "../login/actions";
 
 const categorias = ["Todos", "Trends", "Post", "Natal", "Black Friday"] as const;
@@ -126,6 +127,7 @@ export default function AplicativoPage() {
                 <p className={styles.profileDescription}>
                   Em breve, você poderá personalizar seu perfil e deixar suas ideias ainda mais a sua cara.
                 </p>
+                <PasswordForm />
                 <form action={signOut}>
                   <button className={styles.signOutButton} type="submit">
                     <LogOut size={15} /> Sair da minha conta

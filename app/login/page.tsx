@@ -13,9 +13,9 @@ export const metadata: Metadata = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ acesso?: string; ativado?: string }>;
+  searchParams: Promise<{ acesso?: string }>;
 }) {
-  const { acesso, ativado } = await searchParams;
+  const { acesso } = await searchParams;
 
   return (
     <main className={styles.screen}>
@@ -64,11 +64,6 @@ export default async function LoginPage({
           {acesso === "verificar" && (
             <p className={styles.accessNotice} role="status">
               Não conseguimos validar seu acesso agora. Aguarde um momento e tente novamente.
-            </p>
-          )}
-          {ativado === "1" && (
-            <p className={styles.successNotice} role="status">
-              Conta ativada! Agora entre com seu e-mail e a senha que você criou.
             </p>
           )}
 
