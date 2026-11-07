@@ -3,6 +3,8 @@ import Image from "next/image";
 import LoginForm from "./login-form";
 import styles from "./page.module.css";
 
+export const instant = false;
+
 export const metadata: Metadata = {
   title: "Entrar | Ideias Store",
   description: "Entre na sua conta Ideias Store para acessar suas inspirações.",
