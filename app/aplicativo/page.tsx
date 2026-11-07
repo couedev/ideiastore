@@ -8,6 +8,7 @@ import {
   ChevronRight,
   Heart,
   House,
+  LogOut,
   Play,
   Sparkles,
   UserRound,
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 import styles from "./page.module.css";
 import { videos } from "./videos";
+import { signOut } from "../login/actions";
 
 const categorias = ["Todos", "Trends", "Post", "Natal", "Black Friday"] as const;
 type CategoriaFiltro = (typeof categorias)[number];
@@ -124,6 +126,11 @@ export default function AplicativoPage() {
                 <p className={styles.profileDescription}>
                   Em breve, você poderá personalizar seu perfil e deixar suas ideias ainda mais a sua cara.
                 </p>
+                <form action={signOut}>
+                  <button className={styles.signOutButton} type="submit">
+                    <LogOut size={15} /> Sair da minha conta
+                  </button>
+                </form>
               </div>
             </>
           ) : (
