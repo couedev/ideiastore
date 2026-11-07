@@ -13,7 +13,7 @@ import reveillonImage from "../../public/Carrossel de Réveillon Glamouroso.webp
 import blackFridayImage from "../../public/Carrossel promocional Black Friday.webp";
 import natalImage from "../../public/Ideias de Natal em Reels Festivos.webp";
 import postsImage from "../../public/Carrossel de Moda Rosa e Neutro.webp";
-import bonusImage from "../../public/Carrossel de vídeos em tons rosados.webp";
+import bonusImage from "../../public/Infinite Carousel Video Cards.webp";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
