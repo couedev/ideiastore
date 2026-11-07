@@ -17,6 +17,7 @@ import {
 import styles from "./page.module.css";
 import { videos } from "./videos";
 import PasswordForm from "./password-form";
+import PwaInstallPrompt from "./pwa-install-prompt";
 import { signOut } from "../login/actions";
 
 const categorias = ["Todos", "Trends", "Post", "Natal", "Black Friday"] as const;
@@ -86,6 +87,7 @@ export default function AplicativoPage() {
 
   return (
     <main className={styles.screen}>
+      <PwaInstallPrompt />
       <div className={styles.phone}>
         <header className={styles.header}>
           <div className={styles.brand}>
