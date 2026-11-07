@@ -8,6 +8,7 @@ type SerejaPayload = {
   type?: unknown;
   event?: unknown;
   sale_id?: unknown;
+  payment?: { status?: unknown };
   data?: {
     sale?: {
       id?: unknown;
@@ -114,6 +115,7 @@ export async function POST(request: Request) {
   const saleId = typeof sale?.id === "string" ? sale.id : typeof payload.sale_id === "string" ? payload.sale_id : "";
   const productId = typeof sale?.product_id === "string" ? sale.product_id : "";
   const saleStatus = typeof sale?.status === "string" ? sale.status : "";
+  const paymentStatus = typeof payload.payment?.status === "string" ? payload.payment.status : "";
   const eventId = typeof payload.id === "string" ? payload.id : "";
 
   if (!saleId || saleId.length > 256 || !productId || productId.length > 256) {
@@ -126,6 +128,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Produto do webhook não configurado." }, { status: 503 });
   }
   if (!productIds.includes(productId)) {
+    console.warn("Webhook Sereja ignorado: product_id fora de SEREJA_PRODUCT_IDS.", {
+      eventId,
+      productId,
+    });
     return NextResponse.json({ received: true, ignored: "produto não autorizado" });
   }
 
@@ -134,7 +140,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ received: true, reversed: true });
   }
 
-  if (eventHeader !== "sale.paid" || saleStatus !== "paid") {
+  const saleIsPaid = saleStatus === "paid" || saleStatus === "pago";
+  if (eventHeader !== "sale.paid" || paymentStatus !== "paid" || !saleIsPaid) {
     return NextResponse.json({ received: true, ignored: "pagamento não aprovado" });
   }
 

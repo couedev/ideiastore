@@ -299,6 +299,10 @@ export async function sendPendingActivation(user: StoreUser) {
     });
     return "sent" as const;
   } catch (error) {
+    console.error("Falha ao preparar ou enviar convite de ativação.", {
+      userId: user.id,
+      message: error instanceof Error ? error.message : "erro desconhecido",
+    });
     await updateInviteState(user.id, {
       convite_status: "failed",
       convite_lease_ate: null,
