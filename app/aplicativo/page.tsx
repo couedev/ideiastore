@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import styles from "./page.module.css";
 import { videos } from "./videos";
+import { postsImagens } from "./posts";
 import PasswordForm from "./password-form";
 import PwaInstallPrompt from "./pwa-install-prompt";
 import { signOut } from "../login/actions";
@@ -24,6 +25,10 @@ const categorias = ["Todos", "Trends", "Post", "Natal", "Black Friday"] as const
 type CategoriaFiltro = (typeof categorias)[number];
 type Aba = "home" | "favoritos" | "perfil";
 const videosPorPagina = 10;
+const conteudos = [
+  ...videos.map((video) => ({ ...video, tipo: "video" as const })),
+  ...postsImagens.map((post) => ({ ...post, categoria: "Post" as const, tipo: "imagem" as const })),
+];
 
 const abas: { id: Aba; label: string; icon: typeof House }[] = [
   { id: "home", label: "Início", icon: House },
@@ -37,11 +42,11 @@ export default function AplicativoPage() {
   const [pagina, setPagina] = useState(1);
   const [favoritos, setFavoritos] = useState<string[]>([]);
   const [videoAberto, setVideoAberto] = useState<string | null>(null);
-  const [videosEmOrdem, setVideosEmOrdem] = useState(videos);
+  const [conteudosEmOrdem, setConteudosEmOrdem] = useState(conteudos);
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
-      const embaralhados = [...videos];
+      const embaralhados = [...conteudos];
 
       for (let indice = embaralhados.length - 1; indice > 0; indice -= 1) {
         const aleatorio = Math.floor(Math.random() * (indice + 1));
@@ -51,23 +56,23 @@ export default function AplicativoPage() {
         ];
       }
 
-      setVideosEmOrdem(embaralhados);
+      setConteudosEmOrdem(embaralhados);
     }, 0);
 
     return () => window.clearTimeout(timeout);
   }, []);
 
-  const videosVisiveis = useMemo(() => {
-    return videosEmOrdem.filter((video) => {
-      const naCategoria = categoria === "Todos" || video.categoria === categoria;
-      const naAba = aba !== "favoritos" || favoritos.includes(video.id);
+  const conteudosVisiveis = useMemo(() => {
+    return conteudosEmOrdem.filter((conteudo) => {
+      const naCategoria = categoria === "Todos" || conteudo.categoria === categoria;
+      const naAba = aba !== "favoritos" || favoritos.includes(conteudo.id);
       return naCategoria && naAba;
     });
-  }, [aba, categoria, favoritos, videosEmOrdem]);
+  }, [aba, categoria, favoritos, conteudosEmOrdem]);
 
-  const totalPaginas = Math.max(1, Math.ceil(videosVisiveis.length / videosPorPagina));
+  const totalPaginas = Math.max(1, Math.ceil(conteudosVisiveis.length / videosPorPagina));
   const paginaAtual = Math.min(pagina, totalPaginas);
-  const videosDaPagina = videosVisiveis.slice(
+  const conteudosDaPagina = conteudosVisiveis.slice(
     (paginaAtual - 1) * videosPorPagina,
     paginaAtual * videosPorPagina,
   );
@@ -78,7 +83,7 @@ export default function AplicativoPage() {
     );
   };
 
-  const videoAtivo = videosEmOrdem.find((video) => video.id === videoAberto);
+  const videoAtivo = videos.find((video) => video.id === videoAberto);
   const titulo = aba === "favoritos" ? "Seus favoritos" : "Ideias para sua loja";
   const subtitulo =
     aba === "favoritos"
@@ -167,46 +172,58 @@ export default function AplicativoPage() {
                   {aba === "favoritos" ? "Salvos por você" : "Para se inspirar"}
                 </h2>
                 <span className={styles.sectionCount}>
-                  {videosVisiveis.length} {videosVisiveis.length === 1 ? "vídeo" : "vídeos"}
+                  {conteudosVisiveis.length} {categoria === "Post" ? "imagens" : "itens"}
                 </span>
               </div>
 
-              {videosVisiveis.length > 0 ? (
-                videosDaPagina.map((video) => {
-                  const salvo = favoritos.includes(video.id);
+              {conteudosVisiveis.length > 0 ? (
+                conteudosDaPagina.map((conteudo) => {
+                  const salvo = favoritos.includes(conteudo.id);
+                  const tituloConteudo = conteudo.tipo === "video" ? conteudo.titulo : "Ideia para sua loja";
+                  const descricaoConteudo = conteudo.tipo === "video"
+                    ? conteudo.descricao
+                    : "Uma ideia visual para sua loja.";
                   return (
-                    <article className={styles.videoCard} key={video.id}>
-                      <div
-                        className={styles.videoBackdrop}
-                        role="img"
-                        aria-label={`Prévia do vídeo: ${video.titulo}`}
-                        style={{
-                          backgroundImage: `url(https://drive.google.com/thumbnail?id=${video.arquivoId}&sz=w1200)`,
-                          backgroundPosition: "center",
-                          backgroundSize: "cover",
-                        }}
-                      />
-                      <span className={styles.duration}>VÍDEO</span>
-                      <button
-                        className={styles.playButton}
-                        type="button"
-                        aria-label={`Reproduzir ${video.titulo}`}
-                        onClick={() => setVideoAberto(video.id)}
-                      >
-                        <Play size={23} fill="currentColor" strokeWidth={1.5} />
-                      </button>
+                    <article className={`${styles.videoCard} ${conteudo.tipo === "imagem" ? styles.postCard : ""}`} key={conteudo.id}>
+                      {conteudo.tipo === "imagem" ? (
+                        <Image
+                          className={styles.videoBackdrop}
+                          src={conteudo.imagem}
+                          alt="Ideia visual para post de loja"
+                          fill
+                          sizes="(max-width: 480px) 100vw, 440px"
+                        />
+                      ) : (
+                        <div
+                          className={styles.videoBackdrop}
+                          role="img"
+                          aria-label={`Previa do video: ${conteudo.titulo}`}
+                          style={{ backgroundImage: `url(https://drive.google.com/thumbnail?id=${conteudo.arquivoId}&sz=w1200)` }}
+                        />
+                      )}
+                      <span className={styles.duration}>{conteudo.tipo === "imagem" ? "POST" : "VIDEO"}</span>
+                      {conteudo.tipo === "video" && (
+                        <button
+                          className={styles.playButton}
+                          type="button"
+                          aria-label={`Reproduzir ${conteudo.titulo}`}
+                          onClick={() => setVideoAberto(conteudo.id)}
+                        >
+                          <Play size={23} fill="currentColor" strokeWidth={1.5} />
+                        </button>
+                      )}
                       <div className={styles.videoInfo}>
                         <div className={styles.videoCopy}>
-                          <span className={styles.videoTag}>{video.categoria}</span>
-                          <h3 className={styles.videoTitle}>{video.titulo}</h3>
-                          <p className={styles.videoDescription}>{video.descricao}</p>
+                          <span className={styles.videoTag}>{conteudo.categoria}</span>
+                          <h3 className={styles.videoTitle}>{tituloConteudo}</h3>
+                          <p className={styles.videoDescription}>{descricaoConteudo}</p>
                         </div>
                         <button
                           className={`${styles.favoriteButton} ${salvo ? styles.favoriteActive : ""}`}
                           type="button"
                           aria-label={salvo ? "Remover dos favoritos" : "Adicionar aos favoritos"}
                           aria-pressed={salvo}
-                          onClick={() => alternarFavorito(video.id)}
+                          onClick={() => alternarFavorito(conteudo.id)}
                         >
                           <Heart size={19} fill={salvo ? "currentColor" : "none"} />
                         </button>
