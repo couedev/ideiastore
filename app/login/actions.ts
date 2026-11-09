@@ -52,6 +52,25 @@ export async function signIn(
     return { error: "E-mail ou senha incorretos. Confira seus dados e tente novamente." };
   }
 
+  if (session.user?.user_metadata?.ideastore_password_created !== true) {
+    const userMetadata = session.user?.user_metadata;
+    await fetch(`${url.replace(/\/$/, "")}/auth/v1/user`, {
+      method: "PUT",
+      headers: {
+        apikey: publishableKey,
+        Authorization: `Bearer ${session.access_token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: {
+          ...(userMetadata && typeof userMetadata === "object" ? userMetadata : {}),
+          ideastore_password_created: true,
+        },
+      }),
+      cache: "no-store",
+    }).catch(() => undefined);
+  }
+
   const cookieStore = await cookies();
   cookieStore.set("ideastore-access-token", session.access_token, {
     ...sessionCookieOptions,
@@ -130,7 +149,13 @@ export async function setPassword(
     const updateResponse = await fetch(`${url}/auth/v1/user`, {
       method: "PUT",
       headers: { ...headers, "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({
+        password,
+        data: {
+          ...(user.user_metadata && typeof user.user_metadata === "object" ? user.user_metadata : {}),
+          ideastore_password_created: true,
+        },
+      }),
       cache: "no-store",
     });
 

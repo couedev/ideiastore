@@ -39,7 +39,7 @@ function getPlatform(): Platform {
   return /Android/i.test(agent) ? "android" : "desktop";
 }
 
-export default function PwaInstallPrompt() {
+export default function PwaInstallPrompt({ enabled = true }: { enabled?: boolean }) {
   const [visible, setVisible] = useState(false);
   const [platform, setPlatform] = useState<Platform>("desktop");
   const [installPrompt, setInstallPrompt] = useState<InstallPromptEvent | null>(null);
@@ -51,7 +51,7 @@ export default function PwaInstallPrompt() {
     const displayMode = window.matchMedia("(display-mode: standalone)");
     const frame = window.requestAnimationFrame(() => {
       setPlatform(getPlatform());
-      setVisible(!isInstalled() && !wasDismissed());
+      setVisible(enabled && !isInstalled() && !wasDismissed());
     });
 
     function handleDisplayModeChange() {
@@ -78,7 +78,7 @@ export default function PwaInstallPrompt() {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
       window.removeEventListener("appinstalled", handleAppInstalled);
     };
-  }, []);
+  }, [enabled]);
 
   useEffect(() => {
     if (!visible) return;

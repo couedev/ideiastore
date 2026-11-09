@@ -59,7 +59,7 @@ async function createAuthUser(email: string, name: string): Promise<AuthUser> {
     body: JSON.stringify({
       email,
       email_confirm: false,
-      user_metadata: { name },
+      user_metadata: { name, ideastore_password_created: false },
     }),
   });
 

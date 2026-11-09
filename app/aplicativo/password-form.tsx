@@ -7,22 +7,43 @@ import styles from "./page.module.css";
 
 const initialState: PasswordState = { status: "idle", message: "" };
 
-export default function PasswordForm() {
+type PasswordFormProps = {
+  variant?: "profile" | "onboarding";
+  onComplete?: () => void;
+};
+
+export default function PasswordForm({ variant = "profile", onComplete }: PasswordFormProps) {
   const [state, formAction, pending] = useActionState(setPassword, initialState);
   const formRef = useRef<HTMLFormElement>(null);
+  const completedRef = useRef(false);
 
   useEffect(() => {
-    if (state.status === "success") formRef.current?.reset();
-  }, [state.status]);
+    if (state.status !== "success") {
+      completedRef.current = false;
+      return;
+    }
+
+    formRef.current?.reset();
+    if (variant === "onboarding" && !completedRef.current) {
+      completedRef.current = true;
+      onComplete?.();
+    }
+  }, [onComplete, state.status, variant]);
+
+  const onboarding = variant === "onboarding";
 
   return (
     <section className={styles.passwordPanel} aria-labelledby="password-title">
       <div className={styles.passwordPanelHeader}>
         <LockKeyhole size={17} aria-hidden="true" />
-        <h3 id="password-title" className={styles.passwordPanelTitle}>Entrar com senha</h3>
+        <h3 id="password-title" className={styles.passwordPanelTitle}>
+          {onboarding ? "Crie sua senha para o aplicativo" : "Entrar com senha"}
+        </h3>
       </div>
       <p className={styles.passwordPanelText}>
-        Crie ou altere sua senha quando quiser. O link de acesso continuará disponível.
+        {onboarding
+          ? "Defina uma senha para acessar seu aplicativo sempre que quiser."
+          : "Crie ou altere sua senha quando quiser. O link de acesso continuará disponível."}
       </p>
 
       <form ref={formRef} action={formAction} className={styles.passwordForm}>
@@ -57,7 +78,7 @@ export default function PasswordForm() {
           </p>
         )}
         <button className={styles.passwordSubmit} type="submit" disabled={pending}>
-          {pending ? "Salvando..." : "Salvar senha"}
+          {pending ? "Salvando..." : onboarding ? "Criar senha" : "Salvar senha"}
         </button>
       </form>
     </section>

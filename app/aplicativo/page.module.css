@@ -351,6 +351,13 @@
 .passwordError, .passwordSuccess { margin: 12px 0 0; font-size: 11px; line-height: 1.5; }
 .passwordError { color: #ad294e; }
 .passwordSuccess { color: #42753d; }
+.passwordGate { position: fixed; z-index: 60; display: grid; place-items: center; padding: 20px; background: #21141b91; backdrop-filter: blur(7px); inset: 0; }
+.passwordGateCard { width: min(100%, 440px); max-height: calc(100svh - 40px); padding: 24px; overflow-y: auto; border: 1px solid #f0e4e3; border-radius: 26px; background: #fffaf8; box-shadow: 0 25px 80px #26151b4d; }
+.passwordGateBrand { display: flex; align-items: center; gap: 12px; color: var(--ink); font-size: 16px; font-weight: 750; letter-spacing: -.4px; }
+.passwordGateBrand img { border-radius: 16px; }
+.passwordGateTitle { margin: 22px 0 0; color: var(--ink); font-size: 22px; letter-spacing: -.6px; }
+.passwordGateText, .passwordGateLoading { margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.passwordGate .passwordPanel { margin-top: 16px; padding: 0; border: 0; background: transparent; }
 .signOutButton { display: inline-flex; min-height: 40px; align-items: center; justify-content: center; gap: 8px; margin-top: 18px; padding: 0 15px; border: 1px solid #f0e3e5; border-radius: 12px; background: #fff8f8; color: #bd4966; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
 .signOutButton:hover { background: #fbecef; }
 

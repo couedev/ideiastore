@@ -37,12 +37,30 @@ const abas: { id: Aba; label: string; icon: typeof House }[] = [
 ];
 
 export default function AplicativoPage() {
+  const [passwordSetup, setPasswordSetup] = useState<"checking" | "required" | "complete" | "error">("checking");
   const [categoria, setCategoria] = useState<CategoriaFiltro>("Todos");
   const [aba, setAba] = useState<Aba>("home");
   const [pagina, setPagina] = useState(1);
   const [favoritos, setFavoritos] = useState<string[]>([]);
   const [videoAberto, setVideoAberto] = useState<string | null>(null);
   const [conteudosEmOrdem, setConteudosEmOrdem] = useState(conteudos);
+
+  useEffect(() => {
+    let active = true;
+    void fetch("/api/auth/password-status", { cache: "no-store" })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Não foi possível verificar a senha.");
+        return response.json() as Promise<{ needsPassword: boolean }>;
+      })
+      .then(({ needsPassword }) => {
+        if (active) setPasswordSetup(needsPassword ? "required" : "complete");
+      })
+      .catch(() => {
+        if (active) setPasswordSetup("error");
+      });
+
+    return () => { active = false; };
+  }, []);
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
@@ -89,6 +107,50 @@ export default function AplicativoPage() {
     aba === "favoritos"
       ? "Guarde aqui os vídeos que você quer rever."
       : "Inspiração pronta para virar conteúdo.";
+
+  if (passwordSetup !== "complete") {
+    return (
+      <main className={styles.screen}>
+        <PwaInstallPrompt enabled={false} />
+        <section className={styles.passwordGate} aria-live="polite">
+          <div className={styles.passwordGateCard}>
+            <div className={styles.passwordGateBrand}>
+              <Image src="/icon/icon-storeideias-192.png" alt="" width={54} height={54} priority />
+              <span>ideastore</span>
+            </div>
+            {passwordSetup === "checking" ? (
+              <p className={styles.passwordGateLoading}>Preparando seu aplicativo...</p>
+            ) : passwordSetup === "error" ? (
+              <>
+                <h1 className={styles.passwordGateTitle}>Não conseguimos confirmar seu acesso</h1>
+                <p className={styles.passwordGateText}>
+                  Confira sua conexão e tente novamente para continuar.
+                </p>
+                <button
+                  className={styles.passwordSubmit}
+                  type="button"
+                  onClick={() => window.location.reload()}
+                >
+                  Tentar novamente
+                </button>
+              </>
+            ) : (
+              <>
+                <h1 className={styles.passwordGateTitle}>Seu acesso está quase pronto</h1>
+                <p className={styles.passwordGateText}>
+                  Crie uma senha para entrar no seu aplicativo com mais facilidade.
+                </p>
+                <PasswordForm
+                  variant="onboarding"
+                  onComplete={() => setPasswordSetup("complete")}
+                />
+              </>
+            )}
+          </div>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className={styles.screen}>
