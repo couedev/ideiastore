@@ -1,0 +1,42 @@
+.page {
+  min-height: 100svh;
+  padding: max(20px, env(safe-area-inset-top)) 18px 48px;
+  background: #f3efed;
+  color: #211d1f;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.shell { width: min(100%, 760px); margin: 0 auto; }
+.backLink { display: inline-flex; min-height: 42px; align-items: center; gap: 8px; color: #786970; font-size: 13px; font-weight: 700; text-decoration: none; }
+.backLink:hover { color: #bd3e63; }
+.heading { margin: 21px 0 18px; }
+.eyebrow { margin: 0 0 7px; color: #cf3f68; font-size: 10px; font-weight: 750; letter-spacing: 1.2px; text-transform: uppercase; }
+.heading h1 { margin: 0; font-size: clamp(24px, 6vw, 34px); letter-spacing: -1px; line-height: 1.1; }
+.heading > p:last-child { max-width: 550px; margin: 9px 0 0; color: #81777c; font-size: 14px; line-height: 1.55; }
+.imageCard { position: relative; width: 100%; height: min(68svh, 760px); min-height: 320px; margin: 0; overflow: hidden; border: 1px solid #eee4e2; border-radius: 22px; background: #fff; box-shadow: 0 12px 30px #381a2410; }
+.image { object-fit: contain; }
+.imageActions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.copyButton, .openButton { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 8px; padding: 0 17px; border-radius: 13px; font: inherit; font-size: 13px; font-weight: 750; text-decoration: none; cursor: pointer; }
+.copyButton { border: 0; background: linear-gradient(105deg, #c83d69, #df5472); color: #fff; }
+.openButton { border: 1px solid #e9dcdd; background: #fffaf8; color: #65565d; }
+.copyButton:focus-visible, .openButton:focus-visible, .promptButton:focus-visible, .backLink:focus-visible { outline: 3px solid #cf3f68; outline-offset: 3px; }
+.copyMessage { margin: 9px 2px 0; color: #695f64; font-size: 12px; line-height: 1.5; }
+.instructions { margin-top: 24px; padding: 21px; border: 1px solid #eee4e2; border-radius: 22px; background: #fffaf8; }
+.instructionsTitle { display: flex; align-items: center; gap: 12px; }
+.instructionsIcon { display: grid; width: 42px; height: 42px; flex: 0 0 42px; place-items: center; border-radius: 14px; background: #f9e9ed; color: #cf3f68; }
+.instructionsTitle .eyebrow { margin-bottom: 4px; }
+.instructionsTitle h2 { margin: 0; font-size: 18px; letter-spacing: -.35px; }
+.steps { display: grid; gap: 11px; margin: 20px 0; padding-left: 23px; color: #655b60; font-size: 13px; line-height: 1.55; }
+.steps li { padding-left: 3px; }
+.promptCard { padding: 15px; border: 1px solid #f0e3e5; border-radius: 16px; background: #fff; }
+.promptCard p { margin: 0; color: #51484d; font-size: 13px; line-height: 1.6; }
+.promptButton { display: inline-flex; min-height: 38px; align-items: center; gap: 7px; margin-top: 12px; padding: 0 12px; border: 1px solid #eadde0; border-radius: 10px; background: #fff8f8; color: #bd3e63; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+.tip { margin: 13px 2px 0; color: #837980; font-size: 12px; line-height: 1.55; }
+
+@media (max-width: 520px) {
+  .page { padding-right: 13px; padding-left: 13px; }
+  .imageCard { height: 64svh; min-height: 280px; border-radius: 17px; }
+  .imageActions { display: grid; grid-template-columns: 1fr 1fr; }
+  .copyButton, .openButton { padding: 0 10px; font-size: 12px; }
+  .instructions { padding: 17px; }
+}

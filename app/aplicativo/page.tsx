@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Bookmark,
   ChevronLeft,
@@ -244,17 +245,23 @@ export default function AplicativoPage() {
                   const tituloConteudo = conteudo.tipo === "video" ? conteudo.titulo : "Ideia para sua loja";
                   const descricaoConteudo = conteudo.tipo === "video"
                     ? conteudo.descricao
-                    : "Uma ideia visual para sua loja.";
+                    : "Toque para ver a imagem inteira e as instruções de uso.";
                   return (
                     <article className={`${styles.videoCard} ${conteudo.tipo === "imagem" ? styles.postCard : ""}`} key={conteudo.id}>
                       {conteudo.tipo === "imagem" ? (
-                        <Image
-                          className={styles.videoBackdrop}
-                          src={conteudo.imagem}
-                          alt="Ideia visual para post de loja"
-                          fill
-                          sizes="(max-width: 480px) 100vw, 440px"
-                        />
+                        <Link
+                          className={styles.postOpenLink}
+                          href={`/aplicativo/posts/${conteudo.id}`}
+                          aria-label="Abrir imagem completa e instruções"
+                        >
+                          <Image
+                            className={styles.videoBackdrop}
+                            src={conteudo.imagem}
+                            alt="Ideia visual para post de loja"
+                            fill
+                            sizes="(max-width: 480px) 100vw, 440px"
+                          />
+                        </Link>
                       ) : (
                         <div
                           className={styles.videoBackdrop}
