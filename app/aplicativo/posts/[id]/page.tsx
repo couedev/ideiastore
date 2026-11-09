@@ -2,6 +2,10 @@ import { notFound } from "next/navigation";
 import { postsImagens } from "../../posts";
 import PostDetail from "./post-detail";
 
+export function generateStaticParams() {
+  return postsImagens.map(({ id }) => ({ id }));
+}
+
 export default async function PostDetailPage({
   params,
 }: {
