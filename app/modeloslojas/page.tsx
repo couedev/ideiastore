@@ -7,6 +7,7 @@ import "./shinne.css";
 import DepoimentosCarousel from "./depoimentos-carousel";
 import OfertaEssencialAction from "./oferta-essencial-action";
 import MetaPageView from "./meta-page-view";
+import ExitOfferPopup from "./exit-offer-popup";
 import { checkoutLinks } from "./checkout-links";
 import heroImage from "../../public/Ideias que inspiram sua loja.webp";
 import reveillonImage from "../../public/Carrossel de Réveillon Glamouroso.webp";
@@ -202,6 +203,7 @@ export default function ModelosLojasPage() {
   return (
     <>
     <MetaPageView />
+    <ExitOfferPopup />
     <main className={`${styles.page} ${montserrat.className}`}>
       <section className={styles.hero} aria-labelledby="hero-title">
         <div className={styles.ambientGlow} aria-hidden="true" />
