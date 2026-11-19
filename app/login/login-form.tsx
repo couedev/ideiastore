@@ -18,7 +18,7 @@ export default function LoginForm() {
     setLinkMessage("");
     const normalizedEmail = email.trim().toLowerCase();
     if (!/^\S+@\S+\.\S+$/.test(normalizedEmail)) {
-      setLinkMessage("Digite um email valido para receber o link.");
+      setLinkMessage("Digite um e-mail válido para receber o link.");
       return;
     }
 
@@ -31,11 +31,11 @@ export default function LoginForm() {
     setLinkPending(false);
 
     if (!response?.ok) {
-      setLinkMessage("Nao foi possivel solicitar o link agora. Tente novamente em instantes.");
+      setLinkMessage("Não foi possível solicitar o link agora. Tente novamente em instantes.");
       return;
     }
 
-    setLinkMessage("Se este e-mail tiver uma compra aprovada, enviaremos um link para acessar o aplicativo.");
+    setLinkMessage("Se este e-mail tiver uma compra aprovada, enviaremos um link para acessar sua conta.");
   }
 
   return (

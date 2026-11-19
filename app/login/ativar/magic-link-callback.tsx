@@ -18,7 +18,7 @@ export default function MagicLinkCallback() {
     window.history.replaceState(null, "", window.location.pathname);
 
     if (!tokenHash) {
-      setError("Este link expirou ou ja foi usado. Solicite um novo link de acesso.");
+      setError("Este link expirou ou já foi usado. Solicite um novo link de acesso.");
       return;
     }
 
@@ -35,7 +35,7 @@ export default function MagicLinkCallback() {
       }
 
       const result = await response?.json().catch(() => null);
-      setError(result?.error || "Nao foi possivel validar o link. Solicite um novo.");
+      setError(result?.error || "Não foi possível validar o link. Solicite um novo.");
     })();
   }, [router]);
 
@@ -47,7 +47,7 @@ export default function MagicLinkCallback() {
           <a className={styles.linkButton} href="/login">Solicitar outro link</a>
         </>
       ) : (
-        <p className={styles.subtitle}>Validando seu acesso e abrindo o aplicativo...</p>
+        <p className={styles.subtitle}>Validando seu acesso e abrindo sua conta...</p>
       )}
     </div>
   );

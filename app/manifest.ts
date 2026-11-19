@@ -2,15 +2,15 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Ideias Store",
-    short_name: "Ideias Store",
-    description: "Ideias de conteúdo para sua loja.",
+    name: "Amigo Secreto Natalino",
+    short_name: "Amigo Secreto",
+    description: "Prepare seu Amigo Secreto Natalino.",
     id: "/",
     start_url: "/aplicativo",
     scope: "/",
     display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#c13584",
+    background_color: "#F8F5EA",
+    theme_color: "#15362C",
     icons: [
       {
         src: "/icon/icon-storeideias-192.png",

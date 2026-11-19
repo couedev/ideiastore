@@ -1,14 +1,14 @@
-.screen { display: grid; min-height: 100svh; place-items: center; padding: 24px; background: #f2eeec; color: #282124; font-family: Arial, Helvetica, sans-serif; }
-.card { width: min(100%, 420px); padding: 35px 30px; border: 1px solid #f2e7e5; border-radius: 26px; background: #fffaf8; box-shadow: 0 20px 70px #2e202012; }
-.logo { display: block; margin: 0 auto 22px; border-radius: 50%; }
-.eyebrow { margin: 0 0 8px; color: #c93c68; font-size: 10px; font-weight: 750; letter-spacing: 1.5px; text-align: center; text-transform: uppercase; }
+.screen { display: grid; min-height: 100svh; place-items: center; padding: 24px; background: #F8F5EA; color: #15362C; font-family: Arial, Helvetica, sans-serif; }
+.card { width: min(100%, 420px); padding: 35px 30px; border: 1px solid #15362C1A; border-radius: 26px; background: #fffefb; box-shadow: 0 20px 70px #15362C12; }
+.logo { display: grid; width: 62px; height: 62px; margin: 0 auto 22px; place-items: center; border-radius: 20px; background: #15362C; color: #F8F5EA; }
+.eyebrow { margin: 0 0 8px; color: #721218; font-size: 10px; font-weight: 750; letter-spacing: 1.5px; text-align: center; text-transform: uppercase; }
 .title { margin: 0; font-size: 30px; font-weight: 780; letter-spacing: -1.2px; text-align: center; }
-.subtitle { margin: 10px 0 25px; color: #898087; font-size: 13px; line-height: 1.55; text-align: center; }
+.subtitle { margin: 10px 0 25px; color: #66786E; font-size: 13px; line-height: 1.55; text-align: center; }
 .form { display: flex; flex-direction: column; }
-.label { margin: 15px 0 8px 2px; color: #4a4146; font-size: 12px; font-weight: 700; }
-.input { width: 100%; min-height: 50px; padding: 0 14px; border: 1px solid #eee5e4; border-radius: 14px; background: white; color: #282124; font: inherit; font-size: 14px; }
-.input:focus { border-color: #d77a93; outline: 3px solid #c93c6812; }
-.error { margin: 12px 2px 0; color: #ad294e; font-size: 12px; line-height: 1.45; }
-.submit { min-height: 52px; margin-top: 23px; border: 0; border-radius: 15px; background: linear-gradient(105deg, #c83d69, #df5472); box-shadow: 0 10px 20px #c93c6829; color: #fff; font: inherit; font-size: 13px; font-weight: 750; cursor: pointer; }
+.label { margin: 15px 0 8px 2px; color: #15362C; font-size: 12px; font-weight: 700; }
+.input { width: 100%; min-height: 50px; padding: 0 14px; border: 1px solid #15362C24; border-radius: 14px; background: white; color: #15362C; font: inherit; font-size: 14px; }
+.input:focus { border-color: #15362C; outline: 3px solid #15362C14; }
+.error { margin: 12px 2px 0; color: #721218; font-size: 12px; line-height: 1.45; }
+.submit { min-height: 52px; margin-top: 23px; border: 0; border-radius: 15px; background: #15362C; box-shadow: 0 10px 20px #15362C24; color: #fff; font: inherit; font-size: 13px; font-weight: 750; cursor: pointer; }
 .submit:disabled { cursor: wait; opacity: .65; }
-.linkButton { display: flex; min-height: 52px; align-items: center; justify-content: center; margin-top: 18px; border-radius: 15px; background: linear-gradient(105deg, #c83d69, #df5472); box-shadow: 0 10px 20px #c93c6829; color: #fff; font-size: 13px; font-weight: 750; text-decoration: none; }
+.linkButton { display: flex; min-height: 52px; align-items: center; justify-content: center; margin-top: 18px; border-radius: 15px; background: #15362C; box-shadow: 0 10px 20px #15362C24; color: #fff; font-size: 13px; font-weight: 750; text-decoration: none; }

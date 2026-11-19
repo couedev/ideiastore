@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import { Eye, EyeOff, LockKeyhole } from "lucide-react";
 import { setPassword, type PasswordState } from "../login/actions";
-import styles from "./page.module.css";
+import styles from "./password-form.module.css";
 
 const initialState: PasswordState = { status: "idle", message: "" };
 
@@ -41,13 +41,13 @@ export default function PasswordForm({ variant = "profile", onComplete }: Passwo
       <div className={styles.passwordPanelHeader}>
         <LockKeyhole size={17} aria-hidden="true" />
         <h3 id="password-title" className={styles.passwordPanelTitle}>
-          {onboarding ? "Crie sua senha para o aplicativo" : "Entrar com senha"}
+          {onboarding ? "Crie sua senha para sua conta" : "Alterar senha"}
         </h3>
       </div>
       <p className={styles.passwordPanelText}>
         {onboarding
-          ? "Defina uma senha para acessar seu aplicativo sempre que quiser."
-          : "Crie ou altere sua senha quando quiser. O link de acesso continuará disponível."}
+          ? "Defina uma senha para voltar ao Amigo Secreto Natalino com facilidade."
+          : "Atualize sua senha quando quiser. O link de acesso continuará disponível."}
       </p>
 
       <form ref={formRef} action={formAction} className={styles.passwordForm}>

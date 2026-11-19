@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { ArrowDownToLine, Copy, Share2, Smartphone, Sparkles, X } from "lucide-react";
+import { ArrowDownToLine, Copy, Gift, Share2, Smartphone, Sparkles, X } from "lucide-react";
 import styles from "./pwa-install-prompt.module.css";
 
 type InstallPromptEvent = Event & {
@@ -131,12 +130,10 @@ export default function PwaInstallPrompt({ enabled = true }: { enabled?: boolean
     <div className={styles.backdrop}>
       <section className={styles.panel} role="dialog" aria-modal="true" aria-labelledby="install-title" aria-describedby="install-description">
         <div className={styles.header}>
-          <div className={styles.appIcon}>
-            <Image src="/icon/icon-storeideias-192.png" alt="" width={68} height={68} />
-          </div>
+          <div className={styles.appIcon} aria-hidden="true"><Gift size={30} /></div>
           <div className={styles.headerText}>
             <p className={styles.eyebrow}>Seu aplicativo</p>
-            <h2 id="install-title" className={styles.title}>Instale o IdeaStore</h2>
+            <h2 id="install-title" className={styles.title}>Instale o Amigo Secreto</h2>
           </div>
           <button ref={closeButton} className={styles.close} type="button" onClick={dismiss} aria-label="Fechar aviso de instalação">
             <X size={20} aria-hidden="true" />
@@ -144,13 +141,13 @@ export default function PwaInstallPrompt({ enabled = true }: { enabled?: boolean
         </div>
 
         <p id="install-description" className={styles.description}>
-          Suas ideias favoritas a um toque de distância, direto na tela inicial do seu dispositivo.
+          Seu Amigo Secreto Natalino a um toque de distância, direto na tela inicial do dispositivo.
         </p>
 
         <div className={styles.benefit}>
           <span className={styles.benefitIcon}><Sparkles size={20} aria-hidden="true" /></span>
           <div>
-            <strong>Inspiração sempre à mão</strong>
+            <strong>Sua brincadeira sempre à mão</strong>
             <p>Abra o aplicativo sem procurar o link de acesso novamente.</p>
           </div>
         </div>
@@ -194,7 +191,7 @@ export default function PwaInstallPrompt({ enabled = true }: { enabled?: boolean
               {copyState === "copied" ? "Link copiado" : "Copiar endereço"}
             </button>
           )}
-          {copyState === "error" && <p className={styles.copyError} role="alert">Não foi possível copiar. Abra ideiastore.online/aplicativo no Safari.</p>}
+          {copyState === "error" && <p className={styles.copyError} role="alert">Não foi possível copiar. Abra este aplicativo no Safari e tente novamente.</p>}
           <button className={styles.secondary} type="button" onClick={dismiss}>
             {ios ? "Entendi" : "Agora não"}
           </button>

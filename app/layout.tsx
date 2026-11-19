@@ -13,12 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ideias Store",
-  description: "ideias de conteudo para sua loja!",
-  applicationName: "Ideias Store",
+  title: "Amigo Secreto Natalino",
+  description: "Prepare seu Amigo Secreto Natalino.",
+  applicationName: "Amigo Secreto Natalino",
   appleWebApp: {
     capable: true,
-    title: "Ideias Store",
+    title: "Amigo Secreto",
     statusBarStyle: "default",
   },
   icons: {
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#c13584",
+  themeColor: "#15362C",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

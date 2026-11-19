@@ -1,56 +1,22 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import {
-  Bookmark,
-  ChevronLeft,
-  ChevronRight,
-  Heart,
-  House,
-  LogOut,
-  Play,
-  Sparkles,
-  UserRound,
-  X,
-} from "lucide-react";
-import styles from "./page.module.css";
-import { videos } from "./videos";
-import { postsImagens } from "./posts";
+import { useEffect, useState } from "react";
+import { Gift, LockKeyhole, LogOut, RefreshCw, Sparkles } from "lucide-react";
 import PasswordForm from "./password-form";
 import PwaInstallPrompt from "./pwa-install-prompt";
 import { signOut } from "../login/actions";
 
-const categorias = ["Todos", "Trends", "Post", "Natal", "Black Friday"] as const;
-type CategoriaFiltro = (typeof categorias)[number];
-type Aba = "home" | "favoritos" | "perfil";
-const videosPorPagina = 10;
-const conteudos = [
-  ...videos.map((video) => ({ ...video, tipo: "video" as const })),
-  ...postsImagens.map((post) => ({ ...post, categoria: "Post" as const, tipo: "imagem" as const })),
-];
-
-const abas: { id: Aba; label: string; icon: typeof House }[] = [
-  { id: "home", label: "Início", icon: House },
-  { id: "favoritos", label: "Favoritos", icon: Heart },
-  { id: "perfil", label: "Perfil", icon: UserRound },
-];
+type PasswordSetup = "checking" | "required" | "complete" | "error";
 
 export default function AplicativoPage() {
-  const [passwordSetup, setPasswordSetup] = useState<"checking" | "required" | "complete" | "error">("checking");
-  const [categoria, setCategoria] = useState<CategoriaFiltro>("Todos");
-  const [aba, setAba] = useState<Aba>("home");
-  const [pagina, setPagina] = useState(1);
-  const [favoritos, setFavoritos] = useState<string[]>([]);
-  const [videoAberto, setVideoAberto] = useState<string | null>(null);
-  const [conteudosEmOrdem, setConteudosEmOrdem] = useState(conteudos);
+  const [passwordSetup, setPasswordSetup] = useState<PasswordSetup>("checking");
 
   useEffect(() => {
     let active = true;
+
     void fetch("/api/auth/password-status", { cache: "no-store" })
       .then(async (response) => {
-        if (!response.ok) throw new Error("Não foi possível verificar a senha.");
+        if (!response.ok) throw new Error("Não foi possível verificar o acesso.");
         return response.json() as Promise<{ needsPassword: boolean }>;
       })
       .then(({ needsPassword }) => {
@@ -60,343 +26,104 @@ export default function AplicativoPage() {
         if (active) setPasswordSetup("error");
       });
 
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, []);
-
-  useEffect(() => {
-    const timeout = window.setTimeout(() => {
-      const embaralhados = [...conteudos];
-
-      for (let indice = embaralhados.length - 1; indice > 0; indice -= 1) {
-        const aleatorio = Math.floor(Math.random() * (indice + 1));
-        [embaralhados[indice], embaralhados[aleatorio]] = [
-          embaralhados[aleatorio],
-          embaralhados[indice],
-        ];
-      }
-
-      setConteudosEmOrdem(embaralhados);
-    }, 0);
-
-    return () => window.clearTimeout(timeout);
-  }, []);
-
-  const conteudosVisiveis = useMemo(() => {
-    return conteudosEmOrdem.filter((conteudo) => {
-      const naCategoria = categoria === "Todos" || conteudo.categoria === categoria;
-      const naAba = aba !== "favoritos" || favoritos.includes(conteudo.id);
-      return naCategoria && naAba;
-    });
-  }, [aba, categoria, favoritos, conteudosEmOrdem]);
-
-  const totalPaginas = Math.max(1, Math.ceil(conteudosVisiveis.length / videosPorPagina));
-  const paginaAtual = Math.min(pagina, totalPaginas);
-  const conteudosDaPagina = conteudosVisiveis.slice(
-    (paginaAtual - 1) * videosPorPagina,
-    paginaAtual * videosPorPagina,
-  );
-
-  const alternarFavorito = (id: string) => {
-    setFavoritos((atuais) =>
-      atuais.includes(id) ? atuais.filter((favorito) => favorito !== id) : [...atuais, id],
-    );
-  };
-
-  const videoAtivo = videos.find((video) => video.id === videoAberto);
-  const titulo = aba === "favoritos" ? "Seus favoritos" : "Ideias para sua loja";
-  const subtitulo =
-    aba === "favoritos"
-      ? "Guarde aqui os vídeos que você quer rever."
-      : "Inspiração pronta para virar conteúdo.";
-
-  if (passwordSetup !== "complete") {
-    return (
-      <main className={styles.screen}>
-        <PwaInstallPrompt enabled={false} />
-        <section className={styles.passwordGate} aria-live="polite">
-          <div className={styles.passwordGateCard}>
-            <div className={styles.passwordGateBrand}>
-              <Image src="/icon/icon-storeideias-192.png" alt="" width={54} height={54} priority />
-              <span>ideastore</span>
-            </div>
-            {passwordSetup === "checking" ? (
-              <p className={styles.passwordGateLoading}>Preparando seu aplicativo...</p>
-            ) : passwordSetup === "error" ? (
-              <>
-                <h1 className={styles.passwordGateTitle}>Não conseguimos confirmar seu acesso</h1>
-                <p className={styles.passwordGateText}>
-                  Confira sua conexão e tente novamente para continuar.
-                </p>
-                <button
-                  className={styles.passwordSubmit}
-                  type="button"
-                  onClick={() => window.location.reload()}
-                >
-                  Tentar novamente
-                </button>
-              </>
-            ) : (
-              <>
-                <h1 className={styles.passwordGateTitle}>Seu acesso está quase pronto</h1>
-                <p className={styles.passwordGateText}>
-                  Crie uma senha para entrar no seu aplicativo com mais facilidade.
-                </p>
-                <PasswordForm
-                  variant="onboarding"
-                  onComplete={() => setPasswordSetup("complete")}
-                />
-              </>
-            )}
-          </div>
-        </section>
-      </main>
-    );
-  }
 
   return (
-    <main className={styles.screen}>
-      <PwaInstallPrompt />
-      <div className={styles.phone}>
-        <header className={styles.header}>
-          <div className={styles.brand}>
-            <span className={styles.brandMark} aria-hidden="true">
-              <Image
-                className={styles.brandImage}
-                src="/icon/icon-storeideias-512.png"
-                alt=""
-                width={34}
-                height={34}
-                priority
-              />
-            </span>
-            <span>ideastore</span>
-          </div>
-          <button
-            className={styles.avatar}
-            type="button"
-            aria-label="Abrir perfil"
-            onClick={() => setAba("perfil")}
-          >
-            <UserRound size={18} />
-          </button>
-        </header>
+    <main className="flex min-h-screen items-center justify-center bg-background px-5 py-10 text-foreground">
+      <PwaInstallPrompt enabled={passwordSetup === "complete"} />
 
-        <section className={styles.content}>
-          {aba === "perfil" ? (
-            <>
-              <div className={styles.intro}>
-                <p className={styles.eyebrow}>Sua conta</p>
-                <h1 className={styles.heading}>Perfil</h1>
-                <p className={styles.subheading}>Um espaço para organizar suas inspirações.</p>
-              </div>
-              <div className={styles.profileCard}>
-                <div className={styles.profileAvatar}>
-                  <UserRound size={30} />
-                </div>
-                <h2 className={styles.profileName}>Sua loja</h2>
-                <p className={styles.profileDescription}>
-                  Em breve, você poderá personalizar seu perfil e deixar suas ideias ainda mais a sua cara.
-                </p>
+      <section
+        className="w-full max-w-lg rounded-[2rem] border border-[#15362C]/10 bg-white p-7 shadow-[0_24px_80px_rgba(21,54,44,0.10)] sm:p-10"
+        aria-live="polite"
+      >
+        <div className="mb-8 flex items-center gap-3">
+          <span className="grid size-12 place-items-center rounded-2xl bg-[#15362C] text-[#F8F5EA]">
+            <Gift size={24} aria-hidden="true" />
+          </span>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#721218]">
+              Amigo Secreto
+            </p>
+            <p className="text-sm font-semibold text-[#15362C]/65">Natalino</p>
+          </div>
+        </div>
+
+        {passwordSetup === "checking" && (
+          <div className="py-6 text-center">
+            <p className="text-lg font-semibold">Preparando seu acesso</p>
+            <p className="mt-2 text-sm leading-6 text-[#15362C]/65">
+              Estamos conferindo sua conta. Isso leva só um instante.
+            </p>
+          </div>
+        )}
+
+        {passwordSetup === "error" && (
+          <div className="py-4 text-center">
+            <h1 className="text-2xl font-bold tracking-tight">Não conseguimos confirmar seu acesso</h1>
+            <p className="mt-3 text-sm leading-6 text-[#15362C]/65">
+              Confira sua conexão e tente novamente.
+            </p>
+            <button
+              className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#15362C] px-5 font-semibold text-white transition hover:bg-[#15362C]/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#721218]"
+              type="button"
+              onClick={() => window.location.reload()}
+            >
+              <RefreshCw size={17} aria-hidden="true" />
+              Tentar novamente
+            </button>
+          </div>
+        )}
+
+        {passwordSetup === "required" && (
+          <div>
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-[#721218]">
+              Quase lá
+            </p>
+            <h1 className="text-2xl font-bold tracking-tight">Crie uma senha para sua conta</h1>
+            <p className="mt-3 mb-6 text-sm leading-6 text-[#15362C]/65">
+              Use sua senha para voltar ao Amigo Secreto Natalino com facilidade.
+            </p>
+            <PasswordForm
+              variant="onboarding"
+              onComplete={() => setPasswordSetup("complete")}
+            />
+          </div>
+        )}
+
+        {passwordSetup === "complete" && (
+          <div>
+            <p className="mb-2 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#721218]">
+              <Sparkles size={14} aria-hidden="true" /> Seu acesso está pronto
+            </p>
+            <h1 className="text-2xl font-bold tracking-tight">O clima de Natal está chegando</h1>
+            <p className="mt-3 text-sm leading-6 text-[#15362C]/70">
+              Esta área já está preparada para receber o Amigo Secreto Natalino. Em breve, você poderá voltar por aqui para continuar.
+            </p>
+
+            <details className="mt-8 rounded-2xl border border-[#15362C]/10 bg-[#F8F5EA]/70 p-4">
+              <summary className="flex cursor-pointer list-none items-center gap-2 font-semibold marker:hidden">
+                <LockKeyhole size={17} aria-hidden="true" />
+                Configurações da conta
+              </summary>
+              <div className="mt-5 border-t border-[#15362C]/10 pt-5">
                 <PasswordForm />
-                <form action={signOut}>
-                  <button className={styles.signOutButton} type="submit">
-                    <LogOut size={15} /> Sair da minha conta
+                <form action={signOut} className="mt-5">
+                  <button
+                    className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-[#15362C]/20 px-4 text-sm font-semibold text-[#15362C] transition hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#721218]"
+                    type="submit"
+                  >
+                    <LogOut size={16} aria-hidden="true" />
+                    Sair da conta
                   </button>
                 </form>
               </div>
-            </>
-          ) : (
-            <>
-              <div className={styles.intro}>
-                <p className={styles.eyebrow}>Conteúdo que inspira</p>
-                <h1 className={styles.heading}>{titulo}</h1>
-                <p className={styles.subheading}>{subtitulo}</p>
-              </div>
-
-              <nav className={styles.chips} aria-label="Filtrar vídeos por categoria">
-                {categorias.map((item) => (
-                  <button
-                    className={`${styles.chip} ${categoria === item ? styles.chipActive : ""}`}
-                    type="button"
-                    key={item}
-                    aria-pressed={categoria === item}
-                    onClick={() => {
-                      setCategoria(item);
-                      setPagina(1);
-                    }}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </nav>
-
-              <div className={styles.sectionLine}>
-                <h2 className={styles.sectionTitle}>
-                  {aba === "favoritos" ? "Salvos por você" : "Para se inspirar"}
-                </h2>
-                <span className={styles.sectionCount}>
-                  {conteudosVisiveis.length} {categoria === "Post" ? "imagens" : "itens"}
-                </span>
-              </div>
-
-              {conteudosVisiveis.length > 0 ? (
-                conteudosDaPagina.map((conteudo) => {
-                  const salvo = favoritos.includes(conteudo.id);
-                  const tituloConteudo = conteudo.tipo === "video" ? conteudo.titulo : "Ideia para sua loja";
-                  const descricaoConteudo = conteudo.tipo === "video"
-                    ? conteudo.descricao
-                    : "Toque para ver a imagem inteira e as instruções de uso.";
-                  return (
-                    <article className={`${styles.videoCard} ${conteudo.tipo === "imagem" ? styles.postCard : ""}`} key={conteudo.id}>
-                      {conteudo.tipo === "imagem" ? (
-                        <Link
-                          className={styles.postOpenLink}
-                          href={`/aplicativo/posts/${conteudo.id}`}
-                          aria-label="Abrir imagem completa e instruções"
-                        >
-                          <Image
-                            className={styles.videoBackdrop}
-                            src={conteudo.imagem}
-                            alt="Ideia visual para post de loja"
-                            fill
-                            sizes="(max-width: 480px) 100vw, 440px"
-                          />
-                        </Link>
-                      ) : (
-                        <div
-                          className={styles.videoBackdrop}
-                          role="img"
-                          aria-label={`Previa do video: ${conteudo.titulo}`}
-                          style={{ backgroundImage: `url(https://drive.google.com/thumbnail?id=${conteudo.arquivoId}&sz=w1200)` }}
-                        />
-                      )}
-                      <span className={styles.duration}>{conteudo.tipo === "imagem" ? "POST" : "VIDEO"}</span>
-                      {conteudo.tipo === "video" && (
-                        <button
-                          className={styles.playButton}
-                          type="button"
-                          aria-label={`Reproduzir ${conteudo.titulo}`}
-                          onClick={() => setVideoAberto(conteudo.id)}
-                        >
-                          <Play size={23} fill="currentColor" strokeWidth={1.5} />
-                        </button>
-                      )}
-                      <div className={styles.videoInfo}>
-                        <div className={styles.videoCopy}>
-                          <span className={styles.videoTag}>{conteudo.categoria}</span>
-                          <h3 className={styles.videoTitle}>{tituloConteudo}</h3>
-                          <p className={styles.videoDescription}>{descricaoConteudo}</p>
-                        </div>
-                        <button
-                          className={`${styles.favoriteButton} ${salvo ? styles.favoriteActive : ""}`}
-                          type="button"
-                          aria-label={salvo ? "Remover dos favoritos" : "Adicionar aos favoritos"}
-                          aria-pressed={salvo}
-                          onClick={() => alternarFavorito(conteudo.id)}
-                        >
-                          <Heart size={19} fill={salvo ? "currentColor" : "none"} />
-                        </button>
-                      </div>
-                    </article>
-                  );
-                })
-              ) : (
-                <div className={styles.emptyState}>
-                  <span className={styles.emptyIcon}>
-                    {aba === "favoritos" ? <Bookmark size={22} /> : <Sparkles size={22} />}
-                  </span>
-                  <h3 className={styles.emptyTitle}>
-                    {aba === "favoritos" ? "Seus favoritos aparecem aqui" : "Novas ideias a caminho"}
-                  </h3>
-                  <p className={styles.emptyText}>
-                    {aba === "favoritos"
-                      ? "Toque no coração de um vídeo para salvá-lo e encontrar depois."
-                      : "Estamos preparando mais vídeos para essa categoria."}
-                  </p>
-                </div>
-              )}
-              {totalPaginas > 1 && (
-                <nav className={styles.pagination} aria-label="Paginação dos vídeos">
-                  <button
-                    className={styles.pageButton}
-                    type="button"
-                    aria-label="Página anterior"
-                    disabled={paginaAtual === 1}
-                    onClick={() => setPagina((atual) => Math.max(1, atual - 1))}
-                  >
-                    <ChevronLeft size={18} />
-                  </button>
-                  <span className={styles.pageLabel}>
-                    Página {paginaAtual} de {totalPaginas}
-                  </span>
-                  <button
-                    className={styles.pageButton}
-                    type="button"
-                    aria-label="Próxima página"
-                    disabled={paginaAtual === totalPaginas}
-                    onClick={() => setPagina((atual) => Math.min(totalPaginas, atual + 1))}
-                  >
-                    <ChevronRight size={18} />
-                  </button>
-                </nav>
-              )}
-              {aba === "home" && (
-                <p className={styles.helper}>
-                  <Sparkles size={13} /> Toque no vídeo para assistir à inspiração completa
-                </p>
-              )}
-            </>
-          )}
-        </section>
-
-        <nav className={styles.tabbar} aria-label="Navegação principal">
-          {abas.map(({ id, label, icon: Icon }) => (
-            <button
-              className={`${styles.tabButton} ${aba === id ? styles.tabActive : ""}`}
-              type="button"
-              key={id}
-              aria-label={label}
-              aria-current={aba === id ? "page" : undefined}
-              onClick={() => {
-                setAba(id);
-                setPagina(1);
-              }}
-            >
-              <Icon size={21} strokeWidth={aba === id ? 2.4 : 1.8} />
-            </button>
-          ))}
-        </nav>
-      </div>
-
-      {videoAtivo && (
-        <div
-          className={styles.modal}
-          role="dialog"
-          aria-modal="true"
-          aria-label={videoAtivo.titulo}
-          onClick={(event) => {
-            if (event.target === event.currentTarget) setVideoAberto(null);
-          }}
-        >
-          <div className={styles.modalPanel}>
-            <button
-              className={styles.modalClose}
-              type="button"
-              aria-label="Fechar vídeo"
-              onClick={() => setVideoAberto(null)}
-            >
-              <X size={20} />
-            </button>
-            <iframe
-              className={styles.iframe}
-              src={`https://drive.google.com/file/d/${videoAtivo.arquivoId}/preview`}
-              title={videoAtivo.titulo}
-              allow="autoplay; fullscreen"
-              allowFullScreen
-            />
+            </details>
           </div>
-        </div>
-      )}
+        )}
+      </section>
     </main>
   );
 }
