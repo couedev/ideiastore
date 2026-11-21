@@ -9,6 +9,7 @@
 .headerLink { display: inline-flex; align-items: center; gap: 7px; padding: 10px 0; border: 0; background: transparent; color: #721218; font-size: 13px; font-weight: 750; cursor: pointer; }
 .hero { padding: 72px 0 90px; }
 .heroInner { display: grid; grid-template-columns: 1fr .96fr; grid-template-areas: "intro media" "actions media"; align-items: center; column-gap: clamp(30px, 6vw, 90px); }
+.heroCopy, .heroActions, .heroMedia { min-width: 0; }
 .heroCopy { grid-area: intro; align-self: end; }
 .heroActions { grid-area: actions; align-self: start; }
 .redline, .sectionEyebrow, .offerEyebrow { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 18px; color: #721218; font-size: 11px; font-weight: 800; letter-spacing: 1.8px; line-height: 1.5; text-transform: uppercase; }
@@ -123,12 +124,14 @@
 @keyframes carousel { to { transform: translateX(-50%); } }
 @keyframes couponBlink { 0%, 100% { opacity: 1; } 50% { opacity: .22; } }
 @media (max-width: 800px) {
-  .heroInner, .sectionInner { grid-template-columns: 1fr; }
+  .heroInner, .sectionInner { grid-template-columns: minmax(0, 1fr); }
   .heroInner { grid-template-areas: "intro" "media" "actions"; }
   .heroCopy, .heroActions { align-self: auto; }
   .hero { padding: 55px 0 70px; }
-  .heroMedia { min-height: 300px; aspect-ratio: 1.45; margin-top: 28px; }
-  .heroCta { margin-top: 28px; }
+  .heroMedia { width: 100%; min-height: 0; aspect-ratio: 16 / 9; margin-top: 28px; }
+  .heroActions { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .heroCta { width: min(100%, 360px); margin: 28px auto 0; }
+  .heroNote { justify-content: center; }
   .personalSection, .howSection, .scratchSection, .keepsakeSection, .guaranteeSection, .faqSection { padding: 70px 0; }
   .stepsGrid { grid-template-columns: 1fr; }
   .stepCard { min-height: 0; }
@@ -143,7 +146,12 @@
   .brandMark { width: 32px; height: 32px; margin-right: 3px; }
   .headerLink { font-size: 12px; }
   .hero h1 { font-size: 42px; letter-spacing: -2px; }
-  .heroMedia { min-height: 290px; }
+  .heroMedia { margin-top: 24px; border-radius: 22px; }
+  .heroMedia::before { inset: 10px; border-radius: 15px; }
+  .mediaOrnament, .heroMedia small { display: none; }
+  .playBadge { width: 54px; height: 54px; }
+  .heroMedia p { margin-top: 13px; font-size: 13px; }
+  .heroCta { min-height: 54px; margin-top: 24px; padding-inline: 16px; font-size: 14px; }
   .sectionIntro h2, .scratchCopy h2, .centerIntro h2 { font-size: 34px; }
   .offerCard { padding-inline: 23px; }
   .coupon { margin-inline: -23px; font-size: 9px; }
