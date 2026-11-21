@@ -97,6 +97,8 @@
 .applyCouponInline { display: flex; width: 100%; min-height: 45px; align-items: center; justify-content: center; margin-top: 15px; padding: 9px 12px; border: 1px solid #72121855; border-radius: 12px; background: #fffefb; color: #721218; font-size: 12px; font-weight: 750; cursor: pointer; }
 .applyCouponInline:hover { background: #7212180a; }
 .purchaseButton { width: 100%; margin-top: 20px; }
+.purchaseButton:disabled { opacity: .7; cursor: wait; }
+.checkoutError { margin: 12px 0 0; color: #721218; font-size: 12px; line-height: 1.5; }
 .lifetimeAccess { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 15px 0 0; color: #15362C; font-size: 13px; font-weight: 750; }
 .offerTrust { display: inline-flex; align-items: center; gap: 6px; margin: 8px 0 0; color: #15362C99; font-size: 12px; }
 .guaranteeSection { background: #fffefb; }

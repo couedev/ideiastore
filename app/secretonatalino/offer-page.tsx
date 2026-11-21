@@ -18,6 +18,7 @@ type QuizData = { participantCount: number; names: string[]; budget: string };
 const storageKey = "amigo-secreto-natalino-quiz";
 const couponStorageKey = "amigo-secreto-natalino-cupom-black-friday";
 const checkoutUrl = "https://pay.sereja.com.br/checkout/KYaHLU_M";
+const specialCheckoutUrl = "https://pay.sereja.com.br/checkout/KYaHLU_M?p=ofertablack";
 
 const keepsakeImages = Array.from({ length: 9 }, (_, index) => ({
   src: `/carrossel-lebrancinhas/cssel-${String(index + 1).padStart(2, "0")}.webp`,
@@ -54,6 +55,8 @@ function readQuizData(): QuizData | null {
 export default function OfferPage() {
   const router = useRouter();
   const musicRef = useRef<HTMLAudioElement>(null);
+  const checkoutInProgressRef = useRef(false);
+  const checkoutAbortRef = useRef<AbortController | null>(null);
   const [musicEnabled, setMusicEnabled] = useState(false);
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -62,6 +65,8 @@ export default function OfferPage() {
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponPopupOpen, setCouponPopupOpen] = useState(false);
   const [exitOfferOpen, setExitOfferOpen] = useState(false);
+  const [checkoutBusy, setCheckoutBusy] = useState(false);
+  const [checkoutError, setCheckoutError] = useState("");
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -112,6 +117,11 @@ export default function OfferPage() {
 
     function handleBack(event: PopStateEvent) {
       if (!/^\/secretonatalino\/?$/.test(window.location.pathname) || event.state?.[guardKey]) return;
+      checkoutAbortRef.current?.abort();
+      checkoutAbortRef.current = null;
+      checkoutInProgressRef.current = false;
+      setCheckoutBusy(false);
+      setCheckoutError("");
       setCouponPopupOpen(false);
       setExitOfferOpen(true);
     }
@@ -183,11 +193,57 @@ export default function OfferPage() {
   }
 
   function declineExitOffer() {
+    checkoutAbortRef.current?.abort();
+    checkoutAbortRef.current = null;
+    checkoutInProgressRef.current = false;
+    setCheckoutBusy(false);
+    setCheckoutError("");
     setExitOfferOpen(false);
     if (window.history.length > 2) {
       router.back();
     } else {
       router.replace("/");
+    }
+  }
+
+  async function openCheckout(baseUrl: string) {
+    if (checkoutInProgressRef.current) return;
+    if (!quizData) {
+      router.push("/");
+      return;
+    }
+
+    checkoutInProgressRef.current = true;
+    setCheckoutBusy(true);
+    setCheckoutError("");
+    const controller = new AbortController();
+    checkoutAbortRef.current = controller;
+
+    try {
+      const response = await fetch("/api/amigo-secreto/rascunho", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ names: quizData.names, budget: quizData.budget }),
+        signal: controller.signal,
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok || typeof result?.externalRef !== "string") {
+        throw new Error(result?.error || "Não foi possível preparar seu checkout.");
+      }
+      if (controller.signal.aborted) return;
+      const destination = new URL(baseUrl);
+      destination.searchParams.set("external_ref", result.externalRef);
+      window.location.assign(destination.toString());
+    } catch (error) {
+      if (!controller.signal.aborted) {
+        setCheckoutError(error instanceof Error ? error.message : "Não foi possível preparar seu checkout.");
+      }
+    } finally {
+      if (checkoutAbortRef.current === controller) {
+        checkoutAbortRef.current = null;
+        checkoutInProgressRef.current = false;
+        setCheckoutBusy(false);
+      }
     }
   }
 
@@ -197,7 +253,7 @@ export default function OfferPage() {
     <main className={styles.page}>
       <BackgroundMusic audioRef={musicRef} enabled={musicEnabled} />
       <CouponPopup open={couponPopupOpen} onApply={applyCoupon} onClose={() => setCouponPopupOpen(false)} />
-      <ExitOfferPopup open={exitOfferOpen} name={quizData?.names[0]} onDecline={declineExitOffer} />
+      <ExitOfferPopup open={exitOfferOpen} name={quizData?.names[0]} onAccept={() => void openCheckout(specialCheckoutUrl)} onDecline={declineExitOffer} busy={checkoutBusy} error={checkoutError} />
       <header className={styles.siteHeader}>
         <div className={styles.siteHeaderInner}>
           <span className={styles.brand}><span className={styles.brandMark}><Gift size={21} aria-hidden="true" /></span> Amigo Secreto <b>Natalino</b></span>
@@ -305,7 +361,8 @@ export default function OfferPage() {
           {couponApplied ? <><span>De <s>R$ 39,90</s></span><strong>R$ 17,00</strong><small>Pagamento único com cupom</small></> : <><span>Preço do acesso</span><strong>R$ 39,90</strong><small>Pagamento único</small></>}
         </div>
         {!couponApplied && <button className={styles.applyCouponInline} type="button" onClick={() => setCouponPopupOpen(true)}>Aplicar cupom Black Friday e pagar R$ 17</button>}
-        {!couponApplied ? <button className={styles.purchaseButton} type="button" onClick={() => setCouponPopupOpen(true)}>QUERO RECEBER AGORA! <ArrowRight size={20} aria-hidden="true" /></button> : <a className={`${styles.purchaseButton} natal-shinne`} href={checkoutUrl}>QUERO RECEBER AGORA! <ArrowRight size={20} aria-hidden="true" /></a>}
+        {!couponApplied ? <button className={styles.purchaseButton} type="button" onClick={() => setCouponPopupOpen(true)}>QUERO RECEBER AGORA! <ArrowRight size={20} aria-hidden="true" /></button> : <button className={`${styles.purchaseButton} natal-shinne`} type="button" onClick={() => void openCheckout(checkoutUrl)} disabled={checkoutBusy}>{checkoutBusy ? "PREPARANDO CHECKOUT..." : "QUERO RECEBER AGORA!"} <ArrowRight size={20} aria-hidden="true" /></button>}
+        {checkoutError && !exitOfferOpen && <p className={styles.checkoutError} role="alert">{checkoutError}</p>}
         <p className={styles.lifetimeAccess}><Check size={16} aria-hidden="true" /> Acesso vitalício</p>
         <p className={styles.offerTrust}><ShieldCheck size={16} aria-hidden="true" /> Compra com 7 dias de garantia</p>
       </div></section>

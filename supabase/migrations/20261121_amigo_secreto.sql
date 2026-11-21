@@ -8,9 +8,28 @@ CREATE TABLE IF NOT EXISTS public.amigos_secretos (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   criador_id uuid NOT NULL REFERENCES public.usuarios(id) ON DELETE CASCADE,
   valor_presente text NOT NULL DEFAULT '',
+  sereja_venda_id text,
   criado_em timestamptz NOT NULL DEFAULT now(),
   CONSTRAINT amigos_secretos_valor_presente_check CHECK (char_length(valor_presente) <= 80)
 );
+
+ALTER TABLE public.amigos_secretos ADD COLUMN IF NOT EXISTS sereja_venda_id text;
+CREATE UNIQUE INDEX IF NOT EXISTS amigos_secretos_sereja_venda_id_uidx
+  ON public.amigos_secretos (sereja_venda_id);
+
+-- Rascunho temporário antes da compra. Não cria participantes nem sorteio.
+CREATE TABLE IF NOT EXISTS public.amigo_secreto_rascunhos (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  nomes text[] NOT NULL,
+  valor_presente text NOT NULL DEFAULT '',
+  criado_em timestamptz NOT NULL DEFAULT now(),
+  expira_em timestamptz NOT NULL DEFAULT (now() + interval '7 days'),
+  CONSTRAINT amigo_secreto_rascunhos_nomes_check CHECK (cardinality(nomes) BETWEEN 2 AND 99),
+  CONSTRAINT amigo_secreto_rascunhos_valor_check CHECK (char_length(valor_presente) <= 80)
+);
+
+CREATE INDEX IF NOT EXISTS amigo_secreto_rascunhos_expira_idx
+  ON public.amigo_secreto_rascunhos (expira_em);
 
 CREATE TABLE IF NOT EXISTS public.amigo_secreto_participantes (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -40,9 +59,10 @@ CREATE INDEX IF NOT EXISTS amigo_secreto_participantes_grupo_posicao_idx
 
 ALTER TABLE public.amigos_secretos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.amigo_secreto_participantes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.amigo_secreto_rascunhos ENABLE ROW LEVEL SECURITY;
 
-REVOKE ALL ON TABLE public.amigos_secretos, public.amigo_secreto_participantes FROM anon, authenticated;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.amigos_secretos, public.amigo_secreto_participantes TO service_role;
+REVOKE ALL ON TABLE public.amigos_secretos, public.amigo_secreto_participantes, public.amigo_secreto_rascunhos FROM anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.amigos_secretos, public.amigo_secreto_participantes, public.amigo_secreto_rascunhos TO service_role;
 
 CREATE OR REPLACE FUNCTION public.criar_amigo_secreto(
   p_criador_id uuid,
@@ -120,3 +140,58 @@ $$;
 
 REVOKE ALL ON FUNCTION public.criar_amigo_secreto(uuid, text[], text) FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.criar_amigo_secreto(uuid, text[], text) TO service_role;
+
+-- Só o webhook aprovado chama esta função; a transação cria o grupo e consome o rascunho.
+CREATE OR REPLACE FUNCTION public.finalizar_amigo_secreto_da_venda(
+  p_rascunho_id uuid,
+  p_usuario_id uuid,
+  p_venda_id text
+)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = public, pg_temp
+AS $$
+DECLARE
+  v_rascunho public.amigo_secreto_rascunhos%ROWTYPE;
+  v_grupo_id uuid;
+BEGIN
+  IF p_rascunho_id IS NULL OR p_usuario_id IS NULL OR p_venda_id IS NULL THEN
+    RETURN NULL;
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM public.compras
+    WHERE usuario_id = p_usuario_id AND sereja_venda_id = p_venda_id AND status = 'paid'
+  ) THEN
+    RAISE EXCEPTION 'Esta venda não tem pagamento aprovado.';
+  END IF;
+
+  SELECT id INTO v_grupo_id FROM public.amigos_secretos WHERE sereja_venda_id = p_venda_id;
+  IF v_grupo_id IS NOT NULL THEN
+    RETURN v_grupo_id;
+  END IF;
+
+  SELECT * INTO v_rascunho
+  FROM public.amigo_secreto_rascunhos
+  WHERE id = p_rascunho_id
+  FOR UPDATE;
+
+  IF NOT FOUND THEN
+    SELECT id INTO v_grupo_id FROM public.amigos_secretos WHERE sereja_venda_id = p_venda_id;
+    RETURN v_grupo_id;
+  END IF;
+
+  IF v_rascunho.expira_em < now() THEN
+    RETURN NULL;
+  END IF;
+
+  v_grupo_id := public.criar_amigo_secreto(p_usuario_id, v_rascunho.nomes, v_rascunho.valor_presente);
+  UPDATE public.amigos_secretos SET sereja_venda_id = p_venda_id WHERE id = v_grupo_id;
+  DELETE FROM public.amigo_secreto_rascunhos WHERE id = p_rascunho_id;
+  RETURN v_grupo_id;
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.finalizar_amigo_secreto_da_venda(uuid, uuid, text) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.finalizar_amigo_secreto_da_venda(uuid, uuid, text) TO service_role;

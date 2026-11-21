@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { AmigoSecretoAccessError, requirePaidCreator } from "../../../lib/amigo-secreto-auth";
+import { parseDrawInput } from "../../../lib/amigo-secreto-input";
 import { supabaseAdminFetch } from "../../../lib/supabase-admin";
 
 type GroupRow = { id: string; valor_presente: string; criado_em: string };
@@ -81,22 +82,9 @@ export async function POST(request: Request) {
     const creator = await requirePaidCreator();
     const raw = await request.text();
     if (raw.length > 12000) return json({ error: "Lista de participantes muito grande." }, 413);
-    const body = JSON.parse(raw) as { names?: unknown; budget?: unknown };
-    if (!Array.isArray(body.names) || body.names.length < 2 || body.names.length > 99
-      || !body.names.every((name) => typeof name === "string")) {
-      return json({ error: "Informe de 2 a 99 participantes." }, 400);
-    }
-
-    const names = (body.names as string[]).map((name) => name.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim());
-    if (names.some((name) => !name || name.length > 60)) {
-      return json({ error: "Cada nome deve ter entre 1 e 60 caracteres." }, 400);
-    }
-    if (new Set(names.map((name) => name.toLocaleLowerCase("pt-BR"))).size !== names.length) {
-      return json({ error: "Cada participante precisa ter um nome diferente." }, 400);
-    }
-
-    const budget = typeof body.budget === "string" ? body.budget.trim() : "";
-    if (budget.length > 80) return json({ error: "Valor do presente inválido." }, 400);
+    const parsed = parseDrawInput(JSON.parse(raw));
+    if (!parsed.ok) return json({ error: parsed.error }, 400);
+    const { names, budget } = parsed.value;
 
     const response = await supabaseAdminFetch("/rest/v1/rpc/criar_amigo_secreto", {
       method: "POST",

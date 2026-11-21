@@ -7,12 +7,13 @@ import styles from "./exit-offer-popup.module.css";
 type ExitOfferPopupProps = {
   open: boolean;
   name?: string;
+  busy: boolean;
+  error: string;
+  onAccept: () => void;
   onDecline: () => void;
 };
 
-const specialCheckoutUrl = "https://pay.sereja.com.br/checkout/KYaHLU_M?p=ofertablack";
-
-export default function ExitOfferPopup({ open, name, onDecline }: ExitOfferPopupProps) {
+export default function ExitOfferPopup({ open, name, busy, error, onAccept, onDecline }: ExitOfferPopupProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -45,9 +46,10 @@ export default function ExitOfferPopup({ open, name, onDecline }: ExitOfferPopup
           <strong><small>R$</small> 10,00</strong>
           <p>Pagamento único <span aria-hidden="true">·</span> Acesso vitalício</p>
         </div>
-        <a className={`${styles.accept} natal-shinne`} href={specialCheckoutUrl}>
-          <Gift size={19} aria-hidden="true" /> QUERO OFERTA ESPECIAL <ArrowRight size={18} aria-hidden="true" />
-        </a>
+        <button className={`${styles.accept} natal-shinne`} type="button" onClick={onAccept} disabled={busy}>
+          <Gift size={19} aria-hidden="true" /> {busy ? "PREPARANDO CHECKOUT..." : "QUERO OFERTA ESPECIAL"} <ArrowRight size={18} aria-hidden="true" />
+        </button>
+        {error && <p className={styles.error} role="alert">{error}</p>}
         <p className={styles.guarantee}><Check size={15} aria-hidden="true" /> 7 dias de garantia</p>
         <button className={styles.decline} type="button" onClick={onDecline}>Não quero essa oferta</button>
       </div>

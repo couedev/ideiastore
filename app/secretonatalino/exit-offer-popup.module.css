@@ -23,8 +23,10 @@
 .price strong { display: block; margin: 7px 0 4px; color: #15362c; font-size: 48px; font-weight: 850; letter-spacing: -2px; line-height: 1; }
 .price strong small { font-size: 25px; }
 .price p { margin: 0; color: #15362caa; font-size: 12px; }
-.accept { display: flex; min-height: 54px; align-items: center; justify-content: center; gap: 8px; margin-top: 18px; padding: 11px 13px; border-radius: 14px; background: #721218; box-shadow: 0 12px 25px #72121825; color: #fff; font-size: 13px; font-weight: 800; text-decoration: none; }
+.accept { display: flex; width: 100%; min-height: 54px; align-items: center; justify-content: center; gap: 8px; margin-top: 18px; padding: 11px 13px; border: 0; border-radius: 14px; background: #721218; box-shadow: 0 12px 25px #72121825; color: #fff; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; }
 .accept:hover { background: #8f1e26; }
+.accept:disabled { opacity: .7; cursor: wait; }
+.error { margin: 12px 0 0; color: #721218; font-size: 12px; line-height: 1.5; }
 .guarantee { display: flex; align-items: center; justify-content: center; gap: 5px; margin: 12px 0 0; color: #15362ca3; font-size: 12px; }
 .decline { display: inline-block; margin-top: 15px; padding: 9px 12px; border: 0; background: transparent; color: #15362c99; font: inherit; font-size: 12px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .decline:hover { color: #15362c; }

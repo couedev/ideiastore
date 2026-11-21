@@ -8,18 +8,21 @@ type SerejaPayload = {
   type?: unknown;
   event?: unknown;
   sale_id?: unknown;
+  external_ref?: unknown;
   payment?: { status?: unknown };
   data?: {
     sale?: {
       id?: unknown;
       status?: unknown;
       product_id?: unknown;
+      external_ref?: unknown;
       buyer?: { name?: unknown; email?: unknown };
     };
   };
 };
 
 type Purchase = { id: string; usuario_id: string; status: string; sereja_event_id?: string | null };
+const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 function verifySerejaSignature(rawBody: string, signature: string | null, secret: string) {
   if (!signature || !/^[\da-f]{64}$/i.test(signature)) return false;
@@ -57,6 +60,20 @@ async function savePaidPurchase(userId: string, saleId: string, eventId: string)
     }),
   });
   if (!response.ok) throw new Error(`Não foi possível registrar a compra (${response.status}).`);
+}
+
+async function finalizeDraw(externalRef: string, userId: string, saleId: string) {
+  if (!uuidPattern.test(externalRef)) return;
+  const response = await supabaseAdminFetch("/rest/v1/rpc/finalizar_amigo_secreto_da_venda", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      p_rascunho_id: externalRef,
+      p_usuario_id: userId,
+      p_venda_id: saleId,
+    }),
+  });
+  if (!response.ok) throw new Error(`Não foi possível finalizar o sorteio (${response.status}).`);
 }
 
 async function updateReversedPurchase(saleId: string, status: "refunded" | "chargeback") {
@@ -117,6 +134,9 @@ export async function POST(request: Request) {
   const saleStatus = typeof sale?.status === "string" ? sale.status : "";
   const paymentStatus = typeof payload.payment?.status === "string" ? payload.payment.status : "";
   const eventId = typeof payload.id === "string" ? payload.id : "";
+  const saleExternalRef = typeof sale?.external_ref === "string" ? sale.external_ref.trim() : "";
+  const rootExternalRef = typeof payload.external_ref === "string" ? payload.external_ref.trim() : "";
+  const externalRef = saleExternalRef || rootExternalRef;
 
   if (!saleId || saleId.length > 256 || !productId || productId.length > 256) {
     return NextResponse.json({ error: "Venda incompleta." }, { status: 400 });
@@ -163,6 +183,7 @@ export async function POST(request: Request) {
     const duplicateEvent = await findPurchase("sereja_event_id", eventId);
     if (duplicateEvent) {
       if (duplicateEvent.status === "paid") {
+        await finalizeDraw(externalRef, duplicateEvent.usuario_id, saleId);
         const profile = await getStoreUserById(duplicateEvent.usuario_id);
         if (profile && ["pending", "failed"].includes(profile.convite_status)
           && !(await isAuthUserEmailConfirmed(profile.id))) {
@@ -178,6 +199,7 @@ export async function POST(request: Request) {
     const duplicateSale = await findPurchase("sereja_venda_id", saleId);
     if (duplicateSale) {
       if (duplicateSale.status === "paid") {
+        await finalizeDraw(externalRef, duplicateSale.usuario_id, saleId);
         const profile = await getStoreUserById(duplicateSale.usuario_id);
         if (profile && ["pending", "failed"].includes(profile.convite_status)
           && !(await isAuthUserEmailConfirmed(profile.id))) {
@@ -197,6 +219,8 @@ export async function POST(request: Request) {
     if (!savedPurchase || savedPurchase.status !== "paid") {
       return NextResponse.json({ received: true, duplicate: true });
     }
+
+    await finalizeDraw(externalRef, savedPurchase.usuario_id, saleId);
 
     if (["pending", "failed"].includes(profile.convite_status)
       && !(user.email_confirmed_at || user.confirmed_at)) {
