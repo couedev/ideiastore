@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CandyCane, Gift, LockKeyhole, LogOut, RefreshCw } from "lucide-react";
+import { Gift, LockKeyhole, LogOut, RefreshCw } from "lucide-react";
 import PasswordForm from "./password-form";
-import PwaInstallPrompt from "./pwa-install-prompt";
+import SecretSantaDashboard from "./secret-santa-dashboard";
 import { signOut } from "../login/actions";
 
 type PasswordSetup = "checking" | "required" | "complete" | "error";
@@ -33,10 +33,8 @@ export default function AplicativoPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-5 py-10 text-foreground">
-      <PwaInstallPrompt enabled={passwordSetup === "complete"} />
-
       <section
-        className="w-full max-w-lg rounded-[2rem] border border-[#15362C]/10 bg-white p-7 shadow-[0_24px_80px_rgba(21,54,44,0.10)] sm:p-10"
+        className={`w-full rounded-[2rem] border border-[#15362C]/10 bg-white p-7 shadow-[0_24px_80px_rgba(21,54,44,0.10)] sm:p-10 ${passwordSetup === "complete" ? "max-w-3xl" : "max-w-lg"}`}
         aria-live="polite"
       >
         <div className="mb-8 flex items-center gap-3">
@@ -95,15 +93,9 @@ export default function AplicativoPage() {
 
         {passwordSetup === "complete" && (
           <div>
-            <p className="mb-2 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#721218]">
-              <CandyCane size={14} aria-hidden="true" /> Seu acesso está pronto
-            </p>
-            <h1 className="text-2xl font-bold tracking-tight">O clima de Natal está chegando</h1>
-            <p className="mt-3 text-sm leading-6 text-[#15362C]/70">
-              Esta área já está preparada para receber o Amigo Secreto Natalino. Em breve, você poderá voltar por aqui para continuar.
-            </p>
+            <SecretSantaDashboard />
 
-            <details className="mt-8 rounded-2xl border border-[#15362C]/10 bg-[#F8F5EA]/70 p-4">
+            <details className="mt-10 rounded-2xl border border-[#15362C]/10 bg-[#F8F5EA]/70 p-4">
               <summary className="flex cursor-pointer list-none items-center gap-2 font-semibold marker:hidden">
                 <LockKeyhole size={17} aria-hidden="true" />
                 Configurações da conta

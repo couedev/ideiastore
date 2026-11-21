@@ -77,15 +77,10 @@
 .scratchDemo { width: min(100%, 420px); justify-self: center; }
 .keepsakeSection { overflow: hidden; background: #fffefb; }
 .carouselWindow { overflow: hidden; padding: 6px 0 22px; mask-image: linear-gradient(to right, transparent, black 7%, black 93%, transparent); }
-.carouselTrack { display: flex; width: max-content; animation: carousel 30s linear infinite; }
+.carouselTrack { display: flex; width: max-content; animation: carousel 45s linear infinite; }
 .carouselGroup { display: flex; gap: 18px; padding-right: 18px; }
-.keepsakeCard { display: flex; width: 245px; height: 295px; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #15362C1f; border-radius: 22px; text-align: center; }
-.keepsakeCard.pine { background: #e9eee4; }
-.keepsakeCard.berry { background: #f4e7e4; }
-.keepsakeCard.cream { background: #F8F5EA; }
-.keepsakeArt { display: grid; width: 140px; height: 160px; place-items: center; margin-bottom: 18px; border: 2px dashed #15362C33; border-radius: 15px; background: #ffffff88; color: #721218; }
-.keepsakeCard strong { font-size: 14px; }
-.keepsakeCard small { margin-top: 5px; color: #15362C88; font-size: 11px; }
+.keepsakeCard { width: clamp(215px, 22vw, 270px); aspect-ratio: 3 / 4; flex: 0 0 auto; overflow: hidden; border: 1px solid #15362C1f; border-radius: 22px; background: #F8F5EA; }
+.keepsakeImage { display: block; width: 100%; height: 100%; object-fit: contain; }
 .offerSection { padding: 95px 20px; background: #F8F5EA; scroll-margin-top: 20px; }
 .offerCard { width: min(100%, 590px); margin: auto; overflow: hidden; padding: 0 42px 38px; border: 1px solid #15362C25; border-radius: 28px; background: #fffefb; box-shadow: 0 27px 70px #15362C1c; text-align: center; }
 .coupon { display: flex; min-height: 56px; align-items: center; justify-content: center; gap: 8px; margin: 0 -42px 36px; background: #010101; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 1.4px; }
@@ -154,6 +149,8 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .carouselTrack { animation: none; }
+  .carouselWindow { overflow-x: auto; mask-image: none; }
+  .carouselGroup[aria-hidden="true"] { display: none; }
   .couponBlink { animation: none; }
   .heroCta, .purchaseButton, .faqItem summary svg { transition: none; }
   .page * { scroll-behavior: auto; }

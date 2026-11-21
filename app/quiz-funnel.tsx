@@ -90,6 +90,11 @@ export default function QuizFunnel() {
     } catch {
       // O quiz ainda segue para a oferta se o navegador bloquear o armazenamento da sessão.
     }
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(quizData));
+    } catch {
+      // O formulário do aplicativo ainda pode ser preenchido manualmente.
+    }
 
     setStep("loading");
   }

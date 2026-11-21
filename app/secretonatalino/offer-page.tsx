@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  ArrowRight, BadgeCheck, CandyCane, Check, Copy, Gift, Heart,
+  ArrowRight, BadgeCheck, CandyCane, Check, Copy, Gift,
   Mail, Play, Plus, ShieldCheck, Smartphone, TicketPercent, Trash2, TreePine,
 } from "lucide-react";
 import styles from "./offer-page.module.css";
@@ -18,12 +19,10 @@ const storageKey = "amigo-secreto-natalino-quiz";
 const couponStorageKey = "amigo-secreto-natalino-cupom-black-friday";
 const checkoutUrl = "https://pay.sereja.com.br/checkout/KYaHLU_M";
 
-const keepsakes = [
-  { label: "Cartões de Natal", icon: TreePine, tone: "pine" },
-  { label: "Tags para presentes", icon: Gift, tone: "berry" },
-  { label: "Bilhetinhos especiais", icon: Heart, tone: "cream" },
-  { label: "Mimos para imprimir", icon: CandyCane, tone: "pine" },
-] as const;
+const keepsakeImages = Array.from({ length: 9 }, (_, index) => ({
+  src: `/carrossel-lebrancinhas/cssel-${String(index + 1).padStart(2, "0")}.webp`,
+  alt: `Modelo ${index + 1} de lembrancinha de Natal`,
+}));
 
 const questions = [
   { question: "Como recebo meu Amigo Secreto Natalino?", answer: "Depois da compra, você recebe o acesso por e-mail e pode abrir tudo no celular." },
@@ -34,19 +33,22 @@ const questions = [
 ] as const;
 
 function readQuizData(): QuizData | null {
-  try {
-    const raw = window.sessionStorage.getItem(storageKey);
-    if (!raw) return null;
-    const data: unknown = JSON.parse(raw);
-    if (!data || typeof data !== "object") return null;
-    const candidate = data as Partial<QuizData>;
-    if (!Array.isArray(candidate.names) || !candidate.names.every((name) => typeof name === "string")) return null;
-    const names = candidate.names.map((name) => name.trim()).filter(Boolean);
-    if (names.length < 2) return null;
-    return { participantCount: names.length, names, budget: typeof candidate.budget === "string" ? candidate.budget : "" };
-  } catch {
-    return null;
+  for (const type of ["sessionStorage", "localStorage"] as const) {
+    try {
+      const raw = window[type].getItem(storageKey);
+      if (!raw) continue;
+      const data: unknown = JSON.parse(raw);
+      if (!data || typeof data !== "object") continue;
+      const candidate = data as Partial<QuizData>;
+      if (!Array.isArray(candidate.names) || !candidate.names.every((name) => typeof name === "string")) continue;
+      const names = candidate.names.map((name) => name.trim()).filter(Boolean);
+      if (names.length < 2) continue;
+      return { participantCount: names.length, names, budget: typeof candidate.budget === "string" ? candidate.budget : "" };
+    } catch {
+      // Um rascunho inválido não impede o uso do outro armazenamento.
+    }
   }
+  return null;
 }
 
 export default function OfferPage() {
@@ -124,6 +126,9 @@ export default function OfferPage() {
     setQuizData(next);
     try { window.sessionStorage.setItem(storageKey, JSON.stringify(next)); } catch {
       // A lista continua disponível nesta página mesmo sem armazenamento.
+    }
+    try { window.localStorage.setItem(storageKey, JSON.stringify(next)); } catch {
+      // O formulário do aplicativo ainda pode ser preenchido manualmente.
     }
   }
 
@@ -279,8 +284,16 @@ export default function OfferPage() {
 
       <section className={styles.keepsakeSection} aria-labelledby="keepsakes-title">
         <div className={styles.container}><div className={styles.centerIntro}><p className={styles.sectionEyebrow}>Um carinho a mais</p><h2 id="keepsakes-title">O que você pode levar também</h2><p>Para deixar a brincadeira ainda mais divertida, lembrancinhas de Natal prontinhas para imprimir: bonitas, práticas e econômicas.</p></div></div>
-        <div className={styles.carouselWindow} aria-label="Espaço reservado para o carrossel de lembrancinhas"><div className={styles.carouselTrack}>
-          {[0, 1].map((copyIndex) => <div className={styles.carouselGroup} key={copyIndex} aria-hidden={copyIndex === 1}>{keepsakes.map(({ label, icon: Icon, tone }) => <div className={`${styles.keepsakeCard} ${styles[tone]}`} key={label}><span className={styles.keepsakeArt}><Icon size={55} strokeWidth={1.3} aria-hidden="true" /></span><strong>{label}</strong><small>Imagem em breve</small></div>)}</div>)}
+        <div className={styles.carouselWindow} role="region" aria-label="Carrossel de lembrancinhas de Natal"><div className={styles.carouselTrack}>
+          {[0, 1].map((copyIndex) => (
+            <div className={styles.carouselGroup} key={copyIndex} aria-hidden={copyIndex === 1}>
+              {keepsakeImages.map(({ src, alt }) => (
+                <div className={styles.keepsakeCard} key={src}>
+                  <Image className={styles.keepsakeImage} src={src} alt={alt} width={1080} height={1350} sizes="(max-width: 540px) 215px, (max-width: 1200px) 22vw, 270px" />
+                </div>
+              ))}
+            </div>
+          ))}
         </div></div>
       </section>
 
