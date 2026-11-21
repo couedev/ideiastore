@@ -371,7 +371,7 @@ export default function OfferPage() {
 
       <section className={styles.faqSection} aria-labelledby="faq-title"><div className={styles.container}><div className={styles.centerIntro}><p className={styles.sectionEyebrow}>Tire suas dúvidas</p><h2 id="faq-title">Perguntas frequentes</h2></div><div className={styles.faqList}>{questions.map(({ question, answer }) => <details className={styles.faqItem} key={question}><summary>{question}<Plus size={19} aria-hidden="true" /></summary><p>{answer}</p></details>)}</div></div></section>
 
-      <footer className={styles.footer}><div className={styles.footerInner}><span className={styles.footerBrand}><Gift size={19} aria-hidden="true" /> Amigo Secreto Natalino</span><p>Uma surpresa simples de organizar e gostosa de compartilhar.</p><small>© {new Date().getFullYear()} Amigo Secreto Natalino</small></div></footer>
+      <footer className={styles.footer}><div className={styles.footerInner}><span className={styles.footerBrand}><Gift size={19} aria-hidden="true" /> Amigo Secreto Natalino</span><p>Uma surpresa simples de organizar e gostosa de compartilhar.</p><small>© Amigo Secreto Natalino</small></div></footer>
     </main>
   );
 }
