@@ -1,0 +1,48 @@
+.demo { width: min(100%, 420px); }
+.card {
+  display: flex;
+  min-height: 380px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 26px;
+  border: 9px solid #F8F5EA;
+  border-radius: 28px;
+  background: #721218;
+  box-shadow: 0 26px 65px #071d16a6;
+  color: #F8F5EA;
+  text-align: center;
+}
+.cardEyebrow { font-size: 10px; font-weight: 800; letter-spacing: 2px; }
+.scratchArea {
+  position: relative;
+  width: 100%;
+  height: 225px;
+  margin: 19px 0 12px;
+  overflow: hidden;
+  border: 4px solid #F8F5EA;
+  border-radius: 18px;
+  background: #F8F5EA;
+}
+.result { display: flex; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: center; color: #15362C; }
+.result svg { color: #721218; }
+.result span { margin-top: 8px; font-size: 12px; }
+.result strong { max-width: 100%; padding: 0 10px; overflow-wrap: anywhere; color: #721218; font-size: clamp(26px, 6vw, 39px); line-height: 1.15; }
+.result small { margin-top: 8px; font-size: 12px; font-weight: 700; }
+.cover { position: absolute; inset: 0; width: 100%; height: 100%; background: #d9ded4; cursor: crosshair; touch-action: none; transition: opacity 350ms ease; }
+.scratchPrompt { position: absolute; top: 50%; left: 50%; z-index: 1; color: #15362C; font-size: 19px; font-weight: 800; letter-spacing: 1px; pointer-events: none; white-space: nowrap; transform: translate(-50%, -50%); animation: pulsePrompt 1.5s ease-in-out infinite; }
+.coverRevealed { opacity: 0; pointer-events: none; }
+.cover:focus-visible { outline: 4px solid #d9ae62; outline-offset: -5px; }
+.instruction { margin: 0; font-size: 13px; font-weight: 750; }
+.progress { margin-top: 5px; color: #F8F5EAb3; font-size: 10px; }
+.disclaimer { margin: 20px auto 0; padding: 12px 15px; border: 1px solid #F8F5EA44; border-radius: 13px; background: #F8F5EA14; color: #F8F5EA; font-size: 12px; line-height: 1.5; text-align: center; }
+.disclaimer strong { color: #f4b7b5; }
+@keyframes pulsePrompt { 0%, 100% { opacity: 1; } 50% { opacity: .28; } }
+@media (max-width: 540px) {
+  .card { min-height: 340px; padding: 19px; }
+  .scratchArea { height: 205px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cover { transition: none; }
+  .scratchPrompt { animation: none; }
+}

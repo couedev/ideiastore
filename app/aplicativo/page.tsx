@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Gift, LockKeyhole, LogOut, RefreshCw, Sparkles } from "lucide-react";
+import { CandyCane, Gift, LockKeyhole, LogOut, RefreshCw } from "lucide-react";
 import PasswordForm from "./password-form";
 import PwaInstallPrompt from "./pwa-install-prompt";
 import { signOut } from "../login/actions";
@@ -96,7 +96,7 @@ export default function AplicativoPage() {
         {passwordSetup === "complete" && (
           <div>
             <p className="mb-2 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#721218]">
-              <Sparkles size={14} aria-hidden="true" /> Seu acesso está pronto
+              <CandyCane size={14} aria-hidden="true" /> Seu acesso está pronto
             </p>
             <h1 className="text-2xl font-bold tracking-tight">O clima de Natal está chegando</h1>
             <p className="mt-3 text-sm leading-6 text-[#15362C]/70">

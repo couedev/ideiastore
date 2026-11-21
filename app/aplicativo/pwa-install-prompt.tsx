@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowDownToLine, Copy, Gift, Share2, Smartphone, Sparkles, X } from "lucide-react";
+import { ArrowDownToLine, CandyCane, Copy, Gift, Share2, Smartphone, X } from "lucide-react";
 import styles from "./pwa-install-prompt.module.css";
 
 type InstallPromptEvent = Event & {
@@ -145,7 +145,7 @@ export default function PwaInstallPrompt({ enabled = true }: { enabled?: boolean
         </p>
 
         <div className={styles.benefit}>
-          <span className={styles.benefitIcon}><Sparkles size={20} aria-hidden="true" /></span>
+          <span className={styles.benefitIcon}><CandyCane size={20} aria-hidden="true" /></span>
           <div>
             <strong>Sua brincadeira sempre à mão</strong>
             <p>Abra o aplicativo sem procurar o link de acesso novamente.</p>

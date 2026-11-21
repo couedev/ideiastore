@@ -1,0 +1,28 @@
+.natal-shinne {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.natal-shinne::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -65%;
+  width: 45%;
+  z-index: -1;
+  background: linear-gradient(90deg, transparent, #ffffff24 24%, #ffffff8c 50%, #ffffff24 76%, transparent);
+  content: "";
+  pointer-events: none;
+  transform: translateX(0) skewX(-25deg);
+  animation: natal-shinne 3.2s ease-in-out infinite;
+}
+
+@keyframes natal-shinne {
+  0%, 20% { transform: translateX(0) skewX(-25deg); }
+  65%, 100% { transform: translateX(400%) skewX(-25deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .natal-shinne::after { animation: none; opacity: 0; }
+}

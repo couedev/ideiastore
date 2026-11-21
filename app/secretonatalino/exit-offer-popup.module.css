@@ -1,0 +1,36 @@
+.dialog {
+  width: min(calc(100% - 28px), 460px);
+  max-height: calc(100dvh - 28px);
+  overflow-y: auto;
+  padding: 0;
+  border: 1px solid #15362c30;
+  border-radius: 26px;
+  background: #f8f5ea;
+  box-shadow: 0 30px 90px #071d16a6;
+  color: #15362c;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+.dialog::backdrop { background: #071d16c2; backdrop-filter: blur(5px); }
+.top { padding: 30px 30px 29px; background: #15362c; color: #f8f5ea; }
+.icon { display: grid; width: 56px; height: 56px; place-items: center; margin: 0 auto 17px; border: 1px solid #f8f5ea66; border-radius: 17px; color: #f8f5ea; }
+.eyebrow { margin: 0 0 11px; color: #f4c3b9; font-size: 10px; font-weight: 800; letter-spacing: 1.6px; }
+.top h2 { margin: 0; font-size: clamp(25px, 7vw, 32px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; overflow-wrap: anywhere; }
+.description { margin: 15px 0 0; color: #f8f5eacc; font-size: 14px; line-height: 1.55; }
+.body { padding: 26px 30px 24px; }
+.price { padding: 18px 12px; border: 1px dashed #72121877; border-radius: 16px; background: #fffefb; }
+.price > span { color: #721218; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px; }
+.price strong { display: block; margin: 7px 0 4px; color: #15362c; font-size: 48px; font-weight: 850; letter-spacing: -2px; line-height: 1; }
+.price strong small { font-size: 25px; }
+.price p { margin: 0; color: #15362caa; font-size: 12px; }
+.accept { display: flex; min-height: 54px; align-items: center; justify-content: center; gap: 8px; margin-top: 18px; padding: 11px 13px; border-radius: 14px; background: #721218; box-shadow: 0 12px 25px #72121825; color: #fff; font-size: 13px; font-weight: 800; text-decoration: none; }
+.accept:hover { background: #8f1e26; }
+.guarantee { display: flex; align-items: center; justify-content: center; gap: 5px; margin: 12px 0 0; color: #15362ca3; font-size: 12px; }
+.decline { display: inline-block; margin-top: 15px; padding: 9px 12px; border: 0; background: transparent; color: #15362c99; font: inherit; font-size: 12px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.decline:hover { color: #15362c; }
+.dialog a:focus-visible, .dialog button:focus-visible { outline: 3px solid #b36158; outline-offset: 3px; }
+@media (max-width: 540px) {
+  .dialog { position: fixed; top: auto; right: 0; bottom: 0; left: 0; width: 100%; max-width: none; max-height: calc(100dvh - 12px); margin: 0; border-radius: 25px 25px 0 0; }
+  .top { padding: 25px 24px 24px; }
+  .body { padding: 22px 24px max(20px, env(safe-area-inset-bottom)); }
+}

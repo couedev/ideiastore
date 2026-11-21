@@ -1,0 +1,34 @@
+.music {
+  position: fixed;
+  z-index: 40;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+}
+
+.toggle {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 10px 15px;
+  border: 1px solid #f8f5ea55;
+  border-radius: 99px;
+  background: #15362c;
+  box-shadow: 0 8px 24px #15362c40;
+  color: #f8f5ea;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.toggle:hover { background: #205040; }
+.toggle:focus-visible { outline: 3px solid #721218; outline-offset: 3px; }
+
+@media (max-width: 540px) {
+  .music {
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+  }
+}
