@@ -206,7 +206,7 @@ async function createMagicLink(email: string, name: string) {
     data: { name },
   };
 
-  let response = await supabaseAdminFetch("/auth/v1/admin/generate_link", {
+  const response = await supabaseAdminFetch("/auth/v1/admin/generate_link", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -243,17 +243,52 @@ async function sendBrevoMagicLink(email: string, name: string, actionLink: strin
   const senderEmail = process.env.BREVO_SENDER_EMAIL;
   if (!apiKey || !senderEmail) throw new Error("Brevo API ou remetente não configurado.");
 
-  const safeName = escapeHtml(name || "por aí");
+  const plainName = name.trim() || "por aí";
+  const safeName = escapeHtml(plainName);
   const safeLink = escapeHtml(actionLink);
   const response = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: { "api-key": apiKey, "Content-Type": "application/json" },
     body: JSON.stringify({
-      sender: { name: "IdeaStore", email: senderEmail },
+      sender: { name: "Amigo Secreto Natalino", email: senderEmail },
       to: [{ email, name }],
-      subject: "Link de acesso à IdeaStore",
-      htmlContent: `<!doctype html><html lang="pt-BR"><body style="margin:0;background:#f7f2f2;font-family:Arial,sans-serif;color:#2a2226"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="padding:36px 12px"><tr><td align="center"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:#fff;border-radius:20px;padding:40px 32px"><tr><td><p style="margin:0 0 12px;color:#c63e68;font-weight:bold;letter-spacing:1px;font-size:12px">IDEASTORE</p><h1 style="margin:0 0 16px;font-size:25px">Seu acesso está pronto, ${safeName}!</h1><p style="margin:0 0 26px;color:#766d72;line-height:1.6">Entre com um clique e acesse suas ideias para a loja.</p><p style="margin:0 0 28px"><a href="${safeLink}" style="display:inline-block;padding:15px 24px;border-radius:12px;background:#c93c68;color:#fff;text-decoration:none;font-weight:bold">Acessar meu aplicativo</a></p><p style="margin:0;color:#8c8388;font-size:12px;line-height:1.6">Se o botão não abrir, use este link:<br><a href="${safeLink}" style="color:#c93c68;word-break:break-all">${safeLink}</a></p><p style="margin:28px 0 0;color:#aaa1a6;font-size:11px">Se você não fez essa compra, pode ignorar este e-mail.</p></td></tr></table></td></tr></table></body></html>`,
-      textContent: `Olá, ${name || ""}! Acesse seu aplicativo IdeaStore pelo link: ${actionLink}`,
+      subject: "Seu acesso ao Amigo Secreto Natalino chegou!",
+      htmlContent: `<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Seu Amigo Secreto Natalino</title></head>
+<body style="margin:0;padding:0;background-color:#F8F5EA;color:#15362C;font-family:Arial,Helvetica,sans-serif">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F8F5EA">
+    <tr><td align="center" style="padding:32px 16px">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background-color:#ffffff;border:1px solid #e3e9df;border-radius:18px">
+        <tr><td style="border-top:6px solid #721218;padding:34px 30px 32px">
+          <p style="margin:0 0 20px;color:#721218;font-size:12px;font-weight:700;letter-spacing:2px">AMIGO SECRETO NATALINO</p>
+          <h1 style="margin:0 0 16px;color:#15362C;font-size:28px;line-height:1.2">Seu acesso está liberado, ${safeName}!</h1>
+          <p style="margin:0 0 24px;color:#48675d;font-size:16px;line-height:1.6">Seu Natal ficou mais divertido. Abra o aplicativo para conferir a brincadeira e compartilhar um link individual com cada participante.</p>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 26px;background-color:#F8F5EA;border-radius:12px">
+            <tr><td style="padding:18px 20px;color:#15362C;font-size:14px;line-height:1.6"><strong>Como funciona:</strong> cada pessoa abre o próprio link e raspa o cartão para descobrir quem tirou.</td></tr>
+          </table>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+            <tr><td align="center" bgcolor="#15362C" style="border-radius:12px">
+              <a href="${safeLink}" style="display:block;padding:17px 20px;color:#ffffff;font-size:14px;font-weight:700;letter-spacing:.4px;text-decoration:none">ABRIR MEU AMIGO SECRETO</a>
+            </td></tr>
+          </table>
+          <p style="margin:24px 0 0;color:#62796f;font-size:12px;line-height:1.6">Se o botão não abrir, copie este link:<br><a href="${safeLink}" style="color:#721218;word-break:break-all">${safeLink}</a></p>
+          <p style="margin:26px 0 0;padding-top:18px;border-top:1px solid #e3e9df;color:#72867c;font-size:11px;line-height:1.6">Este link é pessoal e temporário. Se você não solicitou este acesso, pode ignorar este e-mail.</p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
+      textContent: `Olá, ${plainName}!
+
+Seu acesso ao Amigo Secreto Natalino está liberado. Abra o aplicativo para conferir a brincadeira e compartilhar um link individual com cada participante.
+
+Acesse: ${actionLink}
+
+Cada pessoa abre o próprio link e raspa o cartão para descobrir quem tirou.
+
+Este link é pessoal e temporário. Se você não solicitou este acesso, pode ignorar este e-mail.`,
     }),
     cache: "no-store",
   });
