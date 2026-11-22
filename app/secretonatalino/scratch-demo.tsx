@@ -7,7 +7,7 @@ import styles from "./scratch-demo.module.css";
 
 type Point = { x: number; y: number };
 
-export default function ScratchDemo({ name, onReveal }: { name: string; onReveal: () => void }) {
+export default function ScratchDemo({ name, onReveal, demoOnly = true }: { name: string; onReveal: () => void; demoOnly?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const scratching = useRef(false);
   const lastPoint = useRef<Point | null>(null);
@@ -151,7 +151,7 @@ export default function ScratchDemo({ name, onReveal }: { name: string; onReveal
       <div className={styles.card}>
         <span className={styles.cardEyebrow}>AMIGO SECRETO NATALINO</span>
         <div className={styles.scratchArea}>
-          <div className={styles.result}>
+          <div className={styles.result} aria-hidden={!revealed} role="status">
             <Gift size={29} aria-hidden="true" />
             <span>Você tirou</span>
             <strong>{name}</strong>
@@ -174,7 +174,7 @@ export default function ScratchDemo({ name, onReveal }: { name: string; onReveal
         <p className={styles.instruction}>{revealed ? "Nome revelado!" : "Arraste o dedo para raspar"}</p>
         {!revealed && <span className={styles.progress} aria-live="polite">{progress}% raspado</span>}
       </div>
-      {revealed && (
+      {revealed && demoOnly && (
         <p className={styles.disclaimer} role="status">
           Isso é só uma demonstração. Não significa que você tirou <strong>{name}</strong>.
         </p>
