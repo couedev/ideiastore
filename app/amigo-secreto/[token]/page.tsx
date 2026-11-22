@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 async function InviteContent({ params }: { params: PageProps<"/amigo-secreto/[token]">["params"] }) {
   const { token } = await params;
-  return <InvitePreview token={token} />;
+  return <InvitePreview key={token} token={token} />;
 }
 
 export default function AmigoSecretoConvitePage({ params }: PageProps<"/amigo-secreto/[token]">) {

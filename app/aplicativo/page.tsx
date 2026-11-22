@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Gift, LockKeyhole, LogOut, RefreshCw } from "lucide-react";
 import PasswordForm from "./password-form";
 import SecretSantaDashboard from "./secret-santa-dashboard";
+import AppTabBar from "./app-tabbar";
 import { signOut } from "../login/actions";
 
 type PasswordSetup = "checking" | "required" | "complete" | "error";
@@ -32,7 +33,8 @@ export default function AplicativoPage() {
   }, []);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-5 py-10 text-foreground">
+    <>
+    <main className={`flex min-h-screen items-center justify-center bg-background px-5 pt-10 text-foreground ${passwordSetup === "complete" ? "pb-32" : "pb-10"}`}>
       <section
         className={`w-full rounded-[2rem] border border-[#15362C]/10 bg-white p-7 shadow-[0_24px_80px_rgba(21,54,44,0.10)] sm:p-10 ${passwordSetup === "complete" ? "max-w-3xl" : "max-w-lg"}`}
         aria-live="polite"
@@ -117,5 +119,7 @@ export default function AplicativoPage() {
         )}
       </section>
     </main>
+    {passwordSetup === "complete" && <AppTabBar active="sorteio" />}
+    </>
   );
 }

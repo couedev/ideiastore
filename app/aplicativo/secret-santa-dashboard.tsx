@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
-import { CandyCane, Check, Copy, Eye, EyeOff, Gift, Plus, RefreshCw, Trash2, UsersRound } from "lucide-react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { CandyCane, Check, Copy, Eye, Gift, Plus, RefreshCw, Trash2, UsersRound, X } from "lucide-react";
+import ScratchReveal from "../amigo-secreto/scratch-reveal";
 import styles from "./secret-santa-dashboard.module.css";
 
 type Participant = { id: string; position: number; name: string; token: string };
@@ -62,6 +63,7 @@ export default function SecretSantaDashboard() {
   const [showMine, setShowMine] = useState(false);
   const [copiedId, setCopiedId] = useState("");
   const [manualLink, setManualLink] = useState("");
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let active = true;
@@ -80,6 +82,40 @@ export default function SecretSantaDashboard() {
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
   }, []);
+
+  useEffect(() => {
+    if (!showMine) return;
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    modalRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setShowMine(false);
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const focusable = Array.from(modalRef.current?.querySelectorAll<HTMLElement>('button:not([disabled]), [tabindex="0"]') ?? []);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && (document.activeElement === first || !modalRef.current?.contains(document.activeElement))) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus();
+    };
+  }, [showMine]);
 
   async function loadGroup(groupId?: string) {
     setLoading(true);
@@ -221,8 +257,8 @@ export default function SecretSantaDashboard() {
                 <span className={styles.number}>{String(index + 1).padStart(2, "0")}</span>
                 <span className={styles.person}><strong>{participant.name}</strong>{index === 0 && <small>Você · organizador</small>}</span>
                 {index === 0 ? (
-                  <button className={styles.action} type="button" onClick={() => setShowMine((shown) => !shown)} aria-expanded={showMine}>
-                    {showMine ? <EyeOff size={16} aria-hidden="true" /> : <Eye size={16} aria-hidden="true" />}{showMine ? "Ocultar" : "Ver"}
+                  <button className={styles.action} type="button" onClick={() => setShowMine(true)} aria-haspopup="dialog">
+                    <Eye size={16} aria-hidden="true" />Ver
                   </button>
                 ) : (
                   <button className={styles.action} type="button" onClick={() => void copyInvitation(participant)}>
@@ -232,12 +268,25 @@ export default function SecretSantaDashboard() {
               </li>
             ))}
           </ol>
-          {showMine && <div className={styles.myResult} role="status"><span>Você tirou</span><strong>{data.group.myRecipient}</strong><p>Guarde a surpresa até a hora da revelação!</p></div>}
           {manualLink && <div className={styles.manualLink}><label htmlFor="manual-invite-link">Copie o link manualmente:</label><input id="manual-invite-link" value={manualLink} readOnly onFocus={(event) => event.target.select()} /></div>}
           <p className={styles.hint}>Toque em “Copiar” e envie o link para a pessoa certa. Cada convite é individual.</p>
           <button className={styles.newGroup} type="button" onClick={startAnotherGroup}><Plus size={17} aria-hidden="true" /> Criar outro amigo secreto</button>
         </div>
       ) : null}
+
+      {showMine && data.group && !formOpen && (
+        <div className={styles.modalBackdrop} onClick={(event) => { if (event.target === event.currentTarget) setShowMine(false); }}>
+          <div className={styles.modal} ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="my-reveal-title">
+            <button className={styles.modalClose} type="button" onClick={() => setShowMine(false)} aria-label="Fechar revelação"><X size={20} aria-hidden="true" /></button>
+            <p className={styles.modalEyebrow}><CandyCane size={15} aria-hidden="true" /> Sua vez de descobrir</p>
+            <h2 id="my-reveal-title">{data.group.participants[0]?.name || data.creatorName}, chegou a hora da surpresa!</h2>
+            <p className={styles.modalDescription}>Raspe o cartão para descobrir quem você tirou no Amigo Secreto Natalino.</p>
+            {data.group.budget && <p className={styles.modalBudget}>Valor combinado para o presente: {data.group.budget}</p>}
+            <div className={styles.modalScratch}><ScratchReveal recipient={data.group.myRecipient} /></div>
+            <p className={styles.modalHint}>Guarde a surpresa até a troca de presentes!</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
