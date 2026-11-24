@@ -20,13 +20,9 @@
 .heroCta { margin-top: 32px; }
 .heroCta:hover, .purchaseButton:hover:not(:disabled) { transform: translateY(-2px); background: #205040; }
 .heroNote { display: flex; align-items: center; gap: 7px; margin: 16px 0 0; color: #15362C99; font-size: 12px; }
-.heroMedia { grid-area: media; position: relative; display: flex; min-height: 410px; aspect-ratio: 1.08; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #15362C28; border-radius: 34px; background: radial-gradient(circle at 65% 28%, #ffffff 0%, #e6ebdc 45%, #d9e0d2 100%); box-shadow: 0 28px 70px #15362C21; text-align: center; }
-.heroMedia::before { position: absolute; inset: 15px; border: 1px dashed #15362C33; border-radius: 25px; content: ""; }
-.mediaOrnament { display: flex; align-items: center; gap: 28px; margin-bottom: 22px; color: #721218; opacity: .72; }
-.mediaOrnament svg:nth-child(2) { color: #15362C; }
-.playBadge { display: grid; width: 68px; height: 68px; place-items: center; border-radius: 50%; background: #15362C; box-shadow: 0 12px 26px #15362C35; color: #F8F5EA; }
-.heroMedia p { margin: 24px 0 3px; font-size: 16px; font-weight: 750; }
-.heroMedia small { color: #15362C99; font-size: 12px; }
+.heroMedia { grid-area: media; position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid #15362C28; border-radius: 28px; background: #15362C; box-shadow: 0 28px 70px #15362C21; }
+.heroBannerImage { object-fit: cover; opacity: 0; transition: opacity 550ms ease; }
+.heroBannerImageActive { opacity: 1; }
 .personalSection, .howSection, .scratchSection, .keepsakeSection, .guaranteeSection, .faqSection { padding: 100px 0; }
 .personalSection { background: #fffefb; }
 .sectionInner { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(34px, 7vw, 110px); }
@@ -128,7 +124,7 @@
   .heroInner { grid-template-areas: "intro" "media" "actions"; }
   .heroCopy, .heroActions { align-self: auto; }
   .hero { padding: 55px 0 70px; }
-  .heroMedia { width: 100%; min-height: 0; aspect-ratio: 16 / 9; margin-top: 28px; }
+  .heroMedia { margin-top: 28px; }
   .heroActions { display: flex; flex-direction: column; align-items: center; text-align: center; }
   .heroCta { width: min(100%, 360px); margin: 28px auto 0; }
   .heroNote { justify-content: center; }
@@ -147,10 +143,6 @@
   .headerLink { font-size: 12px; }
   .hero h1 { font-size: 42px; letter-spacing: -2px; }
   .heroMedia { margin-top: 24px; border-radius: 22px; }
-  .heroMedia::before { inset: 10px; border-radius: 15px; }
-  .mediaOrnament, .heroMedia small { display: none; }
-  .playBadge { width: 54px; height: 54px; }
-  .heroMedia p { margin-top: 13px; font-size: 13px; }
   .heroCta { min-height: 54px; margin-top: 24px; padding-inline: 16px; font-size: 14px; }
   .sectionIntro h2, .scratchCopy h2, .centerIntro h2 { font-size: 34px; }
   .offerCard { padding-inline: 23px; }
@@ -162,6 +154,7 @@
   .carouselWindow { overflow-x: auto; mask-image: none; }
   .carouselGroup[aria-hidden="true"] { display: none; }
   .couponBlink { animation: none; }
+  .heroBannerImage { transition: none; }
   .heroCta, .purchaseButton, .faqItem summary svg { transition: none; }
   .page * { scroll-behavior: auto; }
 }

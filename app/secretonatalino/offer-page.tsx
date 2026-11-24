@@ -6,13 +6,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   ArrowRight, BadgeCheck, CandyCane, Check, Copy, Gift,
-  Mail, Play, Plus, ShieldCheck, Smartphone, TicketPercent, Trash2, TreePine,
+  Mail, Plus, ShieldCheck, Smartphone, TicketPercent, Trash2,
 } from "lucide-react";
 import styles from "./offer-page.module.css";
 import BackgroundMusic from "./background-music";
 import CouponPopup from "./coupon-popup";
 import ExitOfferPopup from "./exit-offer-popup";
 import ScratchDemo from "./scratch-demo";
+import HeroBanner from "./hero-banner";
 
 type QuizData = { participantCount: number; names: string[]; budget: string };
 const storageKey = "amigo-secreto-natalino-quiz";
@@ -270,11 +271,7 @@ export default function OfferPage() {
             </h1>
             <p className={styles.heroSubtitle}>Você não precisa se preocupar: já deixamos tudo prontinho para você!</p>
           </div>
-          <div className={styles.heroMedia} aria-label="Espaço reservado para imagem ou vídeo da brincadeira">
-            <div className={styles.mediaOrnament} aria-hidden="true"><CandyCane size={28} /><Gift size={48} /><TreePine size={31} /></div>
-            <span className={styles.playBadge}><Play size={24} fill="currentColor" aria-hidden="true" /></span>
-            <p>Uma prévia da surpresa vem aqui</p><small>Espaço para imagem ou vídeo</small>
-          </div>
+          <HeroBanner />
           <div className={styles.heroActions}>
             <button className={styles.heroCta} type="button" onClick={scrollToOffer}>Quero começar a brincadeira <ArrowRight size={18} aria-hidden="true" /></button>
             <p className={styles.heroNote}><Check size={15} aria-hidden="true" /> Fácil de organizar e compartilhar</p>
