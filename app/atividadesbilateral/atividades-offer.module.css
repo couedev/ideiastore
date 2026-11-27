@@ -1,0 +1,247 @@
+.section {
+  padding: 10px 20px 88px;
+  background: #fffefb;
+  color: #205f80;
+  scroll-margin-top: 20px;
+}
+
+.content {
+  width: min(100%, 1020px);
+  margin: 0 auto;
+}
+
+.intro {
+  max-width: 760px;
+  margin: 0 auto 36px;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 9px;
+  color: #b65361;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.intro h2 {
+  margin: 0;
+  color: #174f6b;
+  font-size: clamp(29px, 5vw, 44px);
+  font-weight: 850;
+  letter-spacing: -1.4px;
+  line-height: 1.1;
+}
+
+.intro > p:last-child {
+  margin: 12px 0 0;
+  color: #205f80c7;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 20px;
+  padding-top: 14px;
+}
+
+.basicCard,
+.completeCard {
+  position: relative;
+  overflow: visible;
+  border-radius: 24px;
+  box-shadow: 0 20px 48px #174f6b1a;
+}
+
+.basicCard {
+  border: 1px solid #205f8026;
+  background: #fff;
+  color: #205f80;
+}
+
+.completeCard {
+  border: 1px solid #0f65ad;
+  background: linear-gradient(145deg, #57aff4 0%, #1477c5 58%, #0f65ad 100%);
+  color: #fff;
+}
+
+.planTag {
+  position: absolute;
+  z-index: 2;
+  top: -14px;
+  left: 50%;
+  width: fit-content;
+  margin: 0;
+  padding: 8px 16px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  border: 2px solid #fffefb;
+  background: #e7f3fa;
+  box-shadow: 0 4px 12px #174f6b25;
+  color: #174f6b;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: .9px;
+  text-transform: uppercase;
+}
+
+.completeCard .planTag {
+  border-color: #ffe17c;
+  background: #ffd84d;
+  color: #573c00;
+}
+
+.imageWrap {
+  position: relative;
+  width: 100%;
+  height: clamp(230px, 28vw, 310px);
+  margin-top: 28px;
+  overflow: hidden;
+  border-radius: 23px 23px 0 0;
+  background: #f8f5ea;
+}
+
+.completeCard .imageWrap { background: transparent; }
+
+.image { object-fit: contain; }
+
+.planCopy { padding: 24px 27px 30px; }
+
+.planName {
+  margin: 0 0 3px;
+  color: #e2f3ff;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .7px;
+  text-transform: uppercase;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  line-height: 1;
+}
+
+.price span { font-size: 24px; font-weight: 750; }
+.price strong { font-size: clamp(54px, 7vw, 68px); font-weight: 900; letter-spacing: -3px; }
+
+.payment {
+  margin: 5px 0 0;
+  color: #205f80b3;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.completeCard .payment { color: #ffffffe0; }
+
+.features {
+  display: grid;
+  gap: 12px;
+  margin: 22px 0 0;
+  padding: 18px 0 0;
+  border-top: 1px solid #205f801a;
+  list-style: none;
+}
+
+.completeCard .features { border-color: #ffffff55; }
+
+.features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.features svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: #2ca96b;
+}
+
+.completeCard .features svg { color: #d9ffe9; }
+.completeCard .features .giftIcon { color: #ffd84d; }
+
+.purchaseDetails {
+  margin-top: 22px;
+  padding-top: 17px;
+  border-top: 1px solid #205f801a;
+  text-align: center;
+}
+
+.completeCard .purchaseDetails { border-color: #ffffff55; }
+
+.comparePrice {
+  margin: 0;
+  color: #205f80b3;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.comparePrice s { color: #b65361; }
+.comparePrice strong { margin-left: 3px; font-size: 15px; }
+.completeCard .comparePrice { color: #ffffffe0; }
+.completeCard .comparePrice s { color: #ffe17c; }
+
+.saving {
+  margin: 5px 0 0;
+  color: #2ca96b;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.completeCard .saving { color: #e2ffec; }
+
+.planButton {
+  display: flex;
+  width: 100%;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 14px;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: #205f80;
+  box-shadow: 0 10px 22px #174f6b25;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 850;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 150ms ease, background 150ms ease;
+}
+
+.planButton:hover { transform: translateY(-2px); background: #174f6b; }
+.completeCard .planButton { background: #ffd84d; color: #573c00; }
+.completeCard .planButton:hover { background: #ffe17c; }
+.planButton:focus-visible { outline: 3px solid #b65361a0; outline-offset: 3px; }
+
+@media (max-width: 760px) {
+  .section { padding: 10px 18px 72px; }
+  .intro { margin-bottom: 28px; }
+  .plans { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .imageWrap { height: clamp(240px, 62vw, 330px); }
+  .planCopy { padding: 22px 23px 26px; }
+}
+
+@media (max-width: 480px) {
+  .section { padding-inline: 16px; }
+  .intro h2 { font-size: 30px; letter-spacing: -1px; }
+  .plans { gap: 30px; }
+  .imageWrap { height: 250px; }
+  .planCopy { padding: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .planButton { transition: none; }
+}

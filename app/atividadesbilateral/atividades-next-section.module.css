@@ -1,0 +1,115 @@
+.messageSection,
+.previewSection {
+  --text-blue: #205f80;
+  --text-salmon: #b65361;
+  color: var(--text-blue);
+}
+
+.messageSection {
+  padding: 70px 20px 76px;
+  background: #fffefb;
+}
+
+.messageCard {
+  width: min(100%, 850px);
+  margin: 0 auto;
+  padding: clamp(28px, 5vw, 48px);
+  border: 1px solid #205f8021;
+  border-top: 5px solid var(--text-blue);
+  border-radius: 22px;
+  background: #f8f5ea;
+  box-shadow: 0 18px 45px #205f8012;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--text-salmon);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.messageCard h2 {
+  max-width: 710px;
+  margin: 0 auto;
+  color: #174f6b;
+  font-size: clamp(27px, 4.5vw, 43px);
+  font-weight: 850;
+  letter-spacing: -1.25px;
+  line-height: 1.12;
+}
+
+.messageCopy {
+  max-width: 590px;
+  margin: 17px auto 0;
+  color: #205f80c7;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.cta {
+  display: inline-flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25px;
+  padding: 0 26px;
+  border-radius: 8px;
+  background: #39bd7c;
+  box-shadow: 0 9px 22px #39bd7c35;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 150ms ease, transform 150ms ease;
+}
+
+.cta:hover {
+  transform: translateY(-2px);
+  background: #2ca96b;
+}
+
+.cta:focus-visible {
+  outline: 3px solid #205f8080;
+  outline-offset: 4px;
+}
+
+.previewSection {
+  overflow: hidden;
+  padding: 69px 0 78px;
+  background: #f8f5ea;
+}
+
+.previewIntro {
+  width: min(100% - 40px, 760px);
+  margin: 0 auto 31px;
+  text-align: center;
+}
+
+.previewIntro h2 {
+  margin: 0;
+  font-size: clamp(29px, 5vw, 44px);
+  font-weight: 850;
+  letter-spacing: -1.5px;
+  line-height: 1.12;
+  text-transform: uppercase;
+}
+
+@media (max-width: 540px) {
+  .messageSection { padding: 55px 16px 62px; }
+  .messageCard { padding: 28px 20px; border-radius: 18px; }
+  .messageCard h2 { font-size: 29px; letter-spacing: -.8px; }
+  .messageCopy { font-size: 14px; }
+  .cta { width: min(100%, 340px); min-height: 52px; padding-inline: 16px; font-size: 12px; }
+  .previewSection { padding: 58px 0 66px; }
+  .previewIntro { width: min(100% - 32px, 420px); margin-bottom: 25px; }
+  .previewIntro h2 { font-size: 31px; letter-spacing: -1px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta { transition: none; }
+}

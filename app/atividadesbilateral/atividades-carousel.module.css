@@ -1,0 +1,230 @@
+.section {
+  --text-blue: #205f80;
+  --text-salmon: #b65361;
+  overflow: hidden;
+  padding: 76px 0 82px;
+  background: #fffefb;
+  color: var(--text-blue);
+}
+
+.intro {
+  width: min(100% - 40px, 760px);
+  margin: 0 auto 38px;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--text-salmon);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 1.4px;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.intro h2 {
+  margin: 0;
+  font-size: clamp(29px, 5vw, 47px);
+  font-weight: 800;
+  letter-spacing: -1.6px;
+  line-height: 1.12;
+  text-transform: uppercase;
+}
+
+.intro h2 span { color: var(--text-salmon); }
+
+.carouselWindow {
+  overflow: hidden;
+  padding: 6px 0 22px;
+  mask-image: linear-gradient(to right, transparent, black 7%, black 93%, transparent);
+}
+
+.carouselTrack {
+  display: flex;
+  width: max-content;
+  animation: carousel 42s linear infinite;
+}
+
+.carouselGroup {
+  display: flex;
+  gap: 18px;
+  padding-right: 18px;
+}
+
+.mainImageFrame {
+  position: relative;
+  width: clamp(215px, 22vw, 270px);
+  aspect-ratio: 3 / 4;
+  flex: 0 0 auto;
+}
+
+.mainImage { object-fit: contain; }
+
+.sheetCard {
+  width: clamp(215px, 22vw, 270px);
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.imageSlot {
+  display: grid;
+  aspect-ratio: 3 / 4;
+  place-items: center;
+  overflow: hidden;
+  padding: 18px;
+  border: 1px solid #174f6b1f;
+  border-radius: 22px;
+  background: linear-gradient(150deg, #f8f5ea, #eeeee4);
+  box-shadow: 0 14px 32px #174f6b0d;
+}
+
+.readyBlock {
+  width: min(100% - 40px, 960px);
+  margin: 24px auto 0;
+  padding: 30px clamp(20px, 4vw, 42px);
+  border: 1px solid #174f6b18;
+  border-radius: 24px;
+  background: #f8f5ea;
+  text-align: center;
+}
+
+.readyEyebrow {
+  margin: 0 0 8px;
+  color: var(--text-salmon);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+}
+
+.readyBlock h3 {
+  margin: 0;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 800;
+  letter-spacing: -.8px;
+  line-height: 1.2;
+}
+
+.readySteps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.readySteps li {
+  display: flex;
+  min-height: 74px;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #174f6b18;
+  border-radius: 15px;
+  background: #fffefb;
+}
+
+.readySteps li > span {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  place-items: center;
+  border-radius: 50%;
+  background: #205f80;
+  color: #fffefb;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.readySteps strong,
+.readySteps small {
+  display: block;
+}
+
+.readySteps strong {
+  padding-top: 5px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.readySteps small {
+  margin-top: 5px;
+  color: #205f80b3;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.varietySection {
+  margin-top: 72px;
+}
+
+.varietyIntro {
+  width: min(100% - 40px, 760px);
+  margin: 0 auto 28px;
+  text-align: center;
+}
+
+.varietyIntro h3 {
+  margin: 0;
+  font-size: clamp(25px, 4vw, 38px);
+  font-weight: 800;
+  letter-spacing: -1.1px;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.varietyWindow {
+  overflow: hidden;
+  padding: 6px 0 22px;
+  mask-image: linear-gradient(to right, transparent, black 7%, black 93%, transparent);
+}
+
+.varietyTrack {
+  display: flex;
+  width: max-content;
+  animation: varietyCarousel 52s linear infinite;
+}
+
+.varietyGroup {
+  display: flex;
+  gap: 16px;
+  padding-right: 16px;
+}
+
+@keyframes carousel {
+  to { transform: translateX(-50%); }
+}
+
+@keyframes varietyCarousel {
+  to { transform: translateX(-50%); }
+}
+
+@media (max-width: 540px) {
+  .section { padding: 62px 0 68px; }
+  .intro { width: min(100% - 32px, 420px); margin-bottom: 30px; }
+  .intro h2 { font-size: 32px; letter-spacing: -1px; }
+  .carouselGroup { gap: 14px; padding-right: 14px; }
+  .sheetCard { width: 215px; }
+  .imageSlot { border-radius: 18px; }
+  .readyBlock { width: min(100% - 32px, 420px); margin-top: 18px; padding: 25px 18px; }
+  .readyBlock h3 { font-size: 24px; }
+  .readySteps { grid-template-columns: 1fr; gap: 9px; margin-top: 19px; }
+  .readySteps li { min-height: 0; padding: 12px; }
+  .varietySection { margin-top: 54px; }
+  .varietyIntro { width: min(100% - 32px, 420px); margin-bottom: 28px; }
+  .varietyIntro h3 { font-size: 27px; letter-spacing: -.7px; }
+  .varietyGroup { gap: 14px; padding-right: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carouselTrack { animation: none; }
+  .carouselWindow { overflow-x: auto; mask-image: none; }
+  .carouselGroup[aria-hidden="true"] { display: none; }
+  .varietyTrack { animation: none; }
+  .varietyWindow { overflow-x: auto; mask-image: none; }
+  .varietyGroup[aria-hidden="true"] { display: none; }
+}

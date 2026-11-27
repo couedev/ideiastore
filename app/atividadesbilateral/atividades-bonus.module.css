@@ -1,0 +1,112 @@
+.section {
+  padding: 72px 20px 82px;
+  background: #f8f5ea;
+  color: #205f80;
+}
+
+.content {
+  width: min(100%, 1080px);
+  margin: 0 auto;
+}
+
+.intro {
+  max-width: 740px;
+  margin: 0 auto 34px;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 9px;
+  color: #b65361;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.intro h2 {
+  margin: 0;
+  color: #174f6b;
+  font-size: clamp(29px, 5vw, 45px);
+  font-weight: 850;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+}
+
+.intro > p:last-child {
+  margin: 12px 0 0;
+  color: #205f80c7;
+  font-size: clamp(15px, 2vw, 18px);
+  line-height: 1.5;
+}
+
+.intro strong { color: #b65361; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 15px 15px 20px;
+  border: 1px solid #0f65ad25;
+  border-radius: 20px;
+  background: linear-gradient(150deg, #278acb 0%, #0f65ad 100%);
+  box-shadow: 0 14px 30px #0f65ad20;
+  color: #fff;
+}
+
+.imageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid #ffffffa8;
+  border-radius: 13px;
+  background: #ffffff12;
+}
+
+.bonusImage { object-fit: contain; }
+
+.cardEyebrow {
+  margin: 17px 0 6px;
+  color: #cdeaff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 850;
+  letter-spacing: -.4px;
+  line-height: 1.25;
+}
+
+.description {
+  margin: 9px 0 0;
+  color: #ffffffdb;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+}
+
+@media (max-width: 540px) {
+  .section { padding: 60px 16px 68px; }
+  .intro { margin-bottom: 26px; }
+  .intro h2 { font-size: 31px; letter-spacing: -1px; }
+  .grid { grid-template-columns: 1fr; gap: 12px; }
+  .card { padding: 13px 13px 18px; }
+  .imageWrap { aspect-ratio: 16 / 10; }
+  .cardEyebrow { margin-top: 14px; }
+}
