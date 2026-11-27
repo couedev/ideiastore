@@ -177,6 +177,13 @@
   text-transform: uppercase;
 }
 
+.varietyIntro > p {
+  margin: 9px 0 0;
+  color: #205f80b3;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 .varietyWindow {
   overflow: hidden;
   padding: 6px 0 22px;
@@ -217,6 +224,7 @@
   .varietySection { margin-top: 54px; }
   .varietyIntro { width: min(100% - 32px, 420px); margin-bottom: 28px; }
   .varietyIntro h3 { font-size: 27px; letter-spacing: -.7px; }
+  .varietyIntro > p { font-size: 13px; }
   .varietyGroup { gap: 14px; padding-right: 14px; }
 }
 

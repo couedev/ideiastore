@@ -34,11 +34,22 @@
   line-height: 1.1;
 }
 
-.intro > p:last-child {
-  margin: 12px 0 0;
-  color: #205f80c7;
-  font-size: 15px;
+.offerHeadingSubline {
+  display: block;
+  margin-top: 5px;
+  color: #f7b707;
+  font-size: .76em;
+  letter-spacing: -.6px;
+}
+
+.offerRedline {
+  margin: 6px 0 0;
+  color: #b65361;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: .65px;
   line-height: 1.5;
+  text-transform: uppercase;
 }
 
 .plans {

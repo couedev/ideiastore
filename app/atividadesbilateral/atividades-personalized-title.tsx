@@ -33,6 +33,14 @@ function getPersonName(rawData: string | null) {
 export default function AtividadesPersonalizedTitle() {
   const quizSnapshot = useSyncExternalStore(subscribeToQuizChanges, getQuizSnapshot, () => null);
   const personName = getPersonName(quizSnapshot);
+  const displayName = personName
+    ? `${personName[0].toLocaleUpperCase("pt-BR")}${personName.slice(1)}`
+    : "";
 
-  return personName ? `Personalizadas para ${personName}` : "Personalizadas para você";
+  return (
+    <>
+      <h3 id="variety-title">{displayName ? `Personalizadas para ${displayName}` : "Personalizadas para você"}</h3>
+      <p>{displayName ? `Selecionamos essas atividades para ${displayName}.` : "Selecionamos essas atividades para você."}</p>
+    </>
+  );
 }

@@ -12,24 +12,24 @@ declare global {
   }
 }
 
-function isFunnelPath(pathname: string) {
-  return pathname === "/" || pathname === "/secretonatalino";
+function isTrackedPath(pathname: string) {
+  return ["/", "/secretonatalino", "/funil", "/atividadesbilateral"].includes(pathname);
 }
 
 export default function MetaPixel() {
   const pathname = usePathname();
   const previousPathname = useRef<string | null>(null);
-  const isTrackedPath = isFunnelPath(pathname);
+  const isTracked = isTrackedPath(pathname);
 
   useEffect(() => {
     const previous = previousPathname.current;
     previousPathname.current = pathname;
 
-    if (previous === null || previous === pathname || !isTrackedPath) return;
+    if (previous === null || previous === pathname || !isTracked) return;
     window.fbq?.("track", "PageView");
-  }, [isTrackedPath, pathname]);
+  }, [isTracked, pathname]);
 
-  if (!isTrackedPath) return null;
+  if (!isTracked) return null;
 
   return (
     <>

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
+import Script from "next/script";
 import MetaPixel from "./meta-pixel";
 import "./globals.css";
 
@@ -43,6 +44,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-br" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
+        <Script
+          id="utmify-loader"
+          src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+          strategy="beforeInteractive"
+          data-utmify-prevent-xcod-sck=""
+          data-utmify-prevent-subids=""
+        />
         <Suspense fallback={null}>
           <MetaPixel />
         </Suspense>

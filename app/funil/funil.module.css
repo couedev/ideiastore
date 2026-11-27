@@ -49,13 +49,14 @@
 .title { margin: 0; color: var(--text-blue); font-size: clamp(27px, 6vw, 35px); font-weight: 760; letter-spacing: -1.2px; line-height: 1.15; }
 .title span { color: var(--text-salmon); }
 .subtitle { margin: 12px 0 0; color: var(--text-blue); font-size: 13px; line-height: 1.65; }
-.note { display: flex; align-items: flex-start; gap: 12px; margin: 0 0 24px; padding: 15px; border: 1px solid #174f6b12; border-radius: 15px; background: #f8f5ea; }
-.noteIcon { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; border-radius: 11px; background: #205f8012; color: var(--text-salmon); }
-.note p { margin: 0; color: var(--text-blue); font-size: 11px; line-height: 1.65; }
-.primaryButton { display: flex; width: 100%; min-height: 52px; align-items: center; justify-content: center; gap: 9px; margin-top: 21px; border: 0; border-radius: 15px; background: #174f6b; color: #fff; font: inherit; font-size: 13px; font-weight: 750; cursor: pointer; transition: transform 150ms ease, background 150ms ease, opacity 150ms ease; }
-.primaryButton:hover:not(:disabled) { transform: translateY(-1px); background: #205e7c; }
+.primaryButton { display: flex; width: 100%; min-height: 52px; align-items: center; justify-content: center; gap: 9px; margin-top: 21px; border: 0; border-radius: 15px; background: #39bd7c; color: #fff; font: inherit; font-size: 13px; font-weight: 750; cursor: pointer; transition: transform 150ms ease, background 150ms ease, opacity 150ms ease; }
+.primaryButton:hover:not(:disabled) { transform: translateY(-1px); background: #2ca96b; }
 .primaryButton:disabled { cursor: not-allowed; opacity: .42; }
 .primaryButton:focus-visible, .backButton:focus-visible, .option:focus-visible, .ageOption:focus-visible { outline: 3px solid #b6536166; outline-offset: 3px; }
+
+.autoAdvance { width: min(100%, 300px); margin: 14px auto 0; color: #205f80a8; font-size: 10px; line-height: 1.4; text-align: center; }
+.autoAdvanceTrack { height: 4px; margin-top: 7px; overflow: hidden; border-radius: 99px; background: #205f8012; }
+.autoAdvanceTrack span { display: block; width: 0; height: 100%; border-radius: inherit; background: #39bd7c; animation: welcomeAutoAdvance 10s linear forwards; }
 
 .options { display: grid; gap: 10px; }
 .option { display: flex; min-height: 62px; align-items: center; gap: 12px; padding: 10px 13px; border: 1px solid #174f6b1f; border-radius: 15px; background: #fff; color: var(--text-blue); text-align: left; cursor: pointer; transition: transform 150ms ease, border-color 150ms ease, background 150ms ease, box-shadow 150ms ease; }
@@ -95,6 +96,7 @@
 .footer span { margin-left: 3px; color: var(--text-salmon); }
 
 @keyframes load { to { width: 100%; } }
+@keyframes welcomeAutoAdvance { to { width: 100%; } }
 @keyframes float { 50% { transform: translateY(-5px); } }
 
 @media (max-width: 520px) {
@@ -110,4 +112,5 @@
   .primaryButton, .option, .ageOption, .nameInput { transition: none; }
   .loadingIcon { animation: none; }
   .loadingTrack span { animation-duration: 5s; }
+  .autoAdvanceTrack span { width: 100%; animation: none; }
 }

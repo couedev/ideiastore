@@ -63,7 +63,7 @@ export default function AtividadesCarousel() {
 
       <div className={styles.varietySection} aria-labelledby="variety-title">
         <div className={styles.varietyIntro}>
-          <h3 id="variety-title"><AtividadesPersonalizedTitle /></h3>
+          <AtividadesPersonalizedTitle />
         </div>
         <div className={styles.varietyWindow} role="region" aria-label="Carrossel de imagens com variedade de exercícios">
           <div className={styles.varietyTrack}>

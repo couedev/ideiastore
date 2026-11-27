@@ -8,7 +8,6 @@ import {
   ArrowRight,
   Brain,
   Heart,
-  Hand,
   Sparkles,
   UserRound,
   UserRoundPlus,
@@ -101,6 +100,13 @@ export default function FunilAtividades() {
     return () => window.clearTimeout(timeout);
   }, [router, step]);
 
+  useEffect(() => {
+    if (step !== "welcome") return;
+
+    const timeout = window.setTimeout(() => setStep("relationship"), 10000);
+    return () => window.clearTimeout(timeout);
+  }, [step]);
+
   const activeStep = progressByStep[step] ?? 5;
   const selectedRelationship = relationship ? relationshipCopy[relationship] : null;
   const selectedAgeBand = ageBands.find((band) => band.value === ageBand);
@@ -109,11 +115,6 @@ export default function FunilAtividades() {
     setRelationship(value);
     setAgeBand(null);
     setStep("age");
-  }
-
-  function continueToExplanation() {
-    if (!ageBand) return;
-    setStep("explanation");
   }
 
   function finishQuiz(event: FormEvent<HTMLFormElement>) {
@@ -172,21 +173,20 @@ export default function FunilAtividades() {
             <div className={styles.intro}>
               <p className={styles.eyebrow}><Activity size={14} aria-hidden="true" /> Um plano com mais cuidado</p>
               <h1 id="quiz-title" className={styles.title}>
-                Antes de baixar <span>mais de 100 atividades bilaterais</span> em folhas para exercitar o cérebro idoso...
+                Mais de 100 atividades bilaterais para <span>estimular o corpo e o cérebro.</span>
               </h1>
               <p className={styles.subtitle}>
-                Responda a algumas perguntinhas para receber algo bem mais personalizado para o seu caso.
+                Responda a algumas perguntas e receba uma sugestão personalizada.
               </p>
             </div>
 
-            <div className={styles.note}>
-              <span className={styles.noteIcon} aria-hidden="true"><Hand size={20} /></span>
-              <p>Leva só alguns instantes. No final, vamos preparar uma sugestão pensando em quem vai fazer as atividades.</p>
-            </div>
-
-            <button className={`${styles.primaryButton} natal-shinne`} type="button" onClick={() => setStep("relationship")}>
+            <button className={styles.primaryButton} type="button" onClick={() => setStep("relationship")}>
               Continuar <ArrowRight size={18} aria-hidden="true" />
             </button>
+            <div className={styles.autoAdvance}>
+              <span>Avançando automaticamente em 10 segundos</span>
+              <div className={styles.autoAdvanceTrack} aria-hidden="true"><span /></div>
+            </div>
           </div>
         )}
 
@@ -233,7 +233,10 @@ export default function FunilAtividades() {
                   key={band.value}
                   type="button"
                   aria-pressed={ageBand === band.value}
-                  onClick={() => setAgeBand(band.value)}
+                  onClick={() => {
+                    setAgeBand(band.value);
+                    setStep("explanation");
+                  }}
                 >
                   <span className={styles.radioMark} aria-hidden="true" />
                   {band.label}
@@ -241,9 +244,6 @@ export default function FunilAtividades() {
               ))}
             </div>
 
-            <button className={`${styles.primaryButton} natal-shinne`} type="button" disabled={!ageBand} onClick={continueToExplanation}>
-              Continuar <ArrowRight size={18} aria-hidden="true" />
-            </button>
             <button className={styles.backButton} type="button" onClick={() => setStep("relationship")}>
               <ArrowLeft size={16} aria-hidden="true" /> Voltar
             </button>

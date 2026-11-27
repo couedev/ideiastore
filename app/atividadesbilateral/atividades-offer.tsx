@@ -24,8 +24,11 @@ export default function AtividadesOffer() {
       <div className={styles.content}>
         <div className={styles.intro}>
           <p className={styles.eyebrow}>Escolha seu plano</p>
-          <h2 id="offer-title">Comece hoje com atividades para praticar no seu ritmo</h2>
-          <p>Pagamento único. Acesso vitalício nos dois planos.</p>
+          <h2 id="offer-title">
+            <span>Mais de 100 atividades bilaterais</span>
+            <span className={styles.offerHeadingSubline}>Pelo preço de um lanche.</span>
+          </h2>
+          <p className={styles.offerRedline}>Pagamento único. Acesso vitalício nos dois planos.</p>
         </div>
 
         <div className={styles.plans}>

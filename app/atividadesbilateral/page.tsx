@@ -7,6 +7,7 @@ import AtividadesAfterOffer from "./atividades-after-offer";
 import AtividadesHero from "./atividades-hero";
 import AtividadesIncluded from "./atividades-included";
 import AtividadesNextSection from "./atividades-next-section";
+import AtividadesExitOffer from "./atividades-exit-offer";
 import AtividadesOffer from "./atividades-offer";
 import AtividadesPromoBanner from "./atividades-promo-banner";
 
@@ -28,6 +29,7 @@ export default function AtividadesBilateraisPage() {
       <AtividadesBonus />
       <AtividadesOffer />
       <AtividadesAfterOffer />
+      <AtividadesExitOffer />
     </main>
   );
 }
