@@ -44,7 +44,7 @@ export default function AtividadesOffer() {
               />
             </div>
             <div className={styles.planCopy}>
-              <div className={styles.price}><span>R$</span><strong>17</strong></div>
+              <div className={styles.price}><span>R$</span><strong>10</strong></div>
               <p className={styles.payment}>Pagamento único · acesso vitalício</p>
               <ul className={styles.features}>
                 {basicBenefits.map((benefit) => (
@@ -52,9 +52,9 @@ export default function AtividadesOffer() {
                 ))}
               </ul>
               <div className={styles.purchaseDetails}>
-                <p className={styles.comparePrice}>De <s>R$ 27</s> por <strong>R$ 17</strong></p>
-                <p className={styles.saving}>Você economiza R$ 10</p>
-                <a className={styles.planButton} href="https://pay.sereja.com.br/checkout/I7SjaCSW?p=basico17">Quero o básico</a>
+                <p className={styles.comparePrice}>De <s>R$ 27</s> por <strong>R$ 10</strong></p>
+                <p className={styles.saving}>Você economiza R$ 17</p>
+                <a className={styles.planButton} href="https://pay.sereja.com.br/checkout/I7SjaCSW?p=black10">Quero o básico</a>
               </div>
             </div>
           </article>
@@ -72,7 +72,7 @@ export default function AtividadesOffer() {
             </div>
             <div className={styles.planCopy}>
               <p className={styles.planName}>Plano completo</p>
-              <div className={styles.price}><span>R$</span><strong>27</strong></div>
+              <div className={styles.price}><span>R$</span><strong>17</strong></div>
               <p className={styles.payment}>Pagamento único · acesso vitalício</p>
               <ul className={styles.features}>
                 {completeBenefits.map(({ text, bonus }) => (
@@ -83,8 +83,8 @@ export default function AtividadesOffer() {
                 ))}
               </ul>
               <div className={styles.purchaseDetails}>
-                <p className={styles.comparePrice}>De <s>R$ 47</s> por <strong>R$ 27</strong></p>
-                <p className={styles.saving}>Você economiza R$ 20</p>
+                <p className={styles.comparePrice}>De <s>R$ 47</s> por <strong>R$ 17</strong></p>
+                <p className={styles.saving}>Você economiza R$ 30</p>
                 <a className={styles.planButton} href="https://pay.sereja.com.br/checkout/I7SjaCSW">Quero o completo</a>
               </div>
             </div>

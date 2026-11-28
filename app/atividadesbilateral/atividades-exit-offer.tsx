@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, Check, Gift } from "lucide-react";
 import styles from "./atividades-exit-offer.module.css";
 
-const checkoutUrl = "https://pay.sereja.com.br/checkout/I7SjaCSW?p=black10";
+const checkoutUrl = "https://pay.sereja.com.br/checkout/I7SjaCSW?p=promo5";
 
 export default function AtividadesExitOffer() {
   const router = useRouter();
@@ -66,7 +66,7 @@ export default function AtividadesExitOffer() {
       <div className={styles.body}>
         <div className={styles.price}>
           <span>Plano completo</span>
-          <strong><small>R$</small> 10,00</strong>
+          <strong><small>R$</small> 5,00</strong>
           <p>Pagamento único <span aria-hidden="true">·</span> Acesso vitalício</p>
         </div>
         <a className={styles.accept} href={checkoutUrl}>
